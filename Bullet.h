@@ -17,18 +17,21 @@ public:
 
     void set_x_val(const int& xVal) { x_val = xVal; }
     void set_y_val(const int& yVal) { y_val = yVal; }
+    void set_damage_val( const float& bDamage) { damage = bDamage; }
     int get_x_val() const { return x_val; }
     int get_y_val() const { return y_val; }
+    float get_damage_val() const { return damage; }
 
     void set_is_move(const bool& isMove) { is_move = isMove; }
     bool get_is_move() const { return is_move; }
 
-    void HandleMove(const int& border_x, const int& border_y);
-    bool LoadImg(std::string path, SDL_Renderer* render);
+    void HandleMove();
+    bool LoadImg(std::string path, SDL_Renderer* render, float scaleFactor);
 private:
     int x_val;
     int y_val;
     bool is_move;
+    float damage;
 
 };
 

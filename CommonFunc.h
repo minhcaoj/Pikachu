@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <algorithm> 
 
 static SDL_Window* gWindow = NULL;
 static SDL_Renderer* gRenderer = NULL;

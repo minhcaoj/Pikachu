@@ -15,7 +15,7 @@ BaseObject::~BaseObject()
 	Free();
 }
 
-bool BaseObject::LoadImg(std::string path, SDL_Renderer* screen)
+bool BaseObject::LoadImg(std::string path, SDL_Renderer* screen, float scaleFactor)
 {
 	SDL_Texture* new_texture = NULL;
 	SDL_Surface* load_surface = IMG_Load(path.c_str());
@@ -25,21 +25,23 @@ bool BaseObject::LoadImg(std::string path, SDL_Renderer* screen)
 		new_texture = SDL_CreateTextureFromSurface(screen, load_surface);
 		if (new_texture != NULL)
 		{
-			rect_.w = load_surface->w;
-			rect_.h = load_surface->h;
+			rect_.w = load_surface->w*scaleFactor;
+			rect_.h = load_surface->h*scaleFactor;
 		}
 		SDL_FreeSurface(load_surface);
 	}
 	p_object = new_texture;
 	return p_object != NULL;
 }
-
 void BaseObject::Render(SDL_Renderer* des, const SDL_Rect* clip) {
+	if (p_object == NULL) {
+		// Handle error or return early
+		return;
+	}
 	SDL_Rect renderquad = { rect_.x, rect_.y, rect_.w, rect_.h };
 	SDL_RenderCopy(des, p_object, clip, &renderquad);
-
-	
 }
+
 
 void BaseObject::Free()
 {

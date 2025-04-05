@@ -18,6 +18,8 @@ public:
 	void SetSclae(float scale) { scaleFactor = scale; }
 	void Update(float deltaTime);
 	void HandleBullet(SDL_Renderer* render);
+	void RemoveBullet(int idx);
+	SDL_Rect GetRectFrame();
 	void set_bullet_lists(std::vector<Bullet*> bullet_list)
 	{
 		p_bullet_list = bullet_list;
@@ -26,6 +28,7 @@ public:
 
 private:
 	std::vector<Bullet*> p_bullet_list;
+	
 
 	float x_val;
 	float y_val;

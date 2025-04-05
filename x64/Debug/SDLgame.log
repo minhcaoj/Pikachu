@@ -1,24 +1,12 @@
-﻿  Player.cpp
-C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.h(33,16): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
-  (compiling source file 'Player.cpp')
-  
-C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.h(18,45): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
-  
-C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.cpp(71,37): warning C4018: '>': signed/unsigned mismatch
-C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.cpp(72,13): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.cpp(73,13): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Bullet.cpp
-C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.h(33,16): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
-  (compiling source file 'Bullet.cpp')
-  
-  Generating Code...
-  main.cpp
-C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.h(33,16): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
+﻿  main.cpp
+C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.h(34,16): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
   (compiling source file 'main.cpp')
   
 C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.h(18,45): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'main.cpp')
   
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(49,56): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(53,40): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(156,20): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(163,40): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(170,30): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
   SDLgame.vcxproj -> C:\Users\Acer\source\repos\SDLgame\x64\Debug\SDLgame.exe

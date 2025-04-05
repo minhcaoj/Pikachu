@@ -1,6 +1,8 @@
 C:\Users\Acer\source\repos\SDLgame\SDLgame\BaseObject.cpp;C:\Users\Acer\source\repos\SDLgame\SDLgame\x64\Debug\BaseObject.obj
+C:\Users\Acer\source\repos\SDLgame\SDLgame\Collision.cpp;C:\Users\Acer\source\repos\SDLgame\SDLgame\x64\Debug\Collision.obj
 C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.cpp;C:\Users\Acer\source\repos\SDLgame\SDLgame\x64\Debug\CommonFunc.obj
 C:\Users\Acer\source\repos\SDLgame\SDLgame\Enemy.cpp;C:\Users\Acer\source\repos\SDLgame\SDLgame\x64\Debug\Enemy.obj
+C:\Users\Acer\source\repos\SDLgame\SDLgame\InfiniteMap.cpp;C:\Users\Acer\source\repos\SDLgame\SDLgame\x64\Debug\InfiniteMap.obj
 C:\Users\Acer\source\repos\SDLgame\SDLgame\Itachi.cpp;C:\Users\Acer\source\repos\SDLgame\SDLgame\x64\Debug\Itachi.obj
 C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp;C:\Users\Acer\source\repos\SDLgame\SDLgame\x64\Debug\main.obj
 C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.cpp;C:\Users\Acer\source\repos\SDLgame\SDLgame\x64\Debug\Player.obj

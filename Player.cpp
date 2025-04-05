@@ -20,6 +20,8 @@ Player::Player()
 	speed = 100.0f;
 	scaleFactor = 2;
 	bulletLevel = 1;
+	
+	
 }
 
 Player::~Player()
@@ -29,7 +31,7 @@ Player::~Player()
 
 bool Player::LoadImg(std::string path, SDL_Renderer* render)
 {
-	bool ret = BaseObject::LoadImg(path, render);
+	bool ret = BaseObject::LoadImg(path, render, 1);
 	if (ret == true)
 	{
 		width_frame = 32;
@@ -86,6 +88,9 @@ void Player::Show(SDL_Renderer* render)
 
 }
 
+
+
+
 void Player::HandleBullet(SDL_Renderer* render)
 {
 	for (int i = 0; i < p_bullet_list.size(); i++) // Duyệt từ cuối về đầu
@@ -95,7 +100,7 @@ void Player::HandleBullet(SDL_Renderer* render)
 		{
 			if (p_bullet->get_is_move())
 			{
-				p_bullet->HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT);
+				p_bullet->HandleMove();
 				p_bullet->Render(render);
 			}
 			else
@@ -118,7 +123,7 @@ void Player::HandleInputAction(SDL_Event events, SDL_Renderer* render) {
 		case SDLK_d:
 			input_type.right = 1;
 			break;
-		
+
 
 		}
 	}
@@ -137,13 +142,15 @@ void Player::HandleInputAction(SDL_Event events, SDL_Renderer* render) {
 	if (events.type == SDL_MOUSEBUTTONDOWN) {
 		if (events.button.button == SDL_BUTTON_LEFT) {
 			Bullet* p_bullet = new Bullet();
-			
-			if (p_bullet != nullptr && p_bullet->LoadImg("res//Ball//poke ball.png", render)) {
+
+			if (p_bullet != nullptr && p_bullet->LoadImg("res//Ball//poke ball.png", render,0.05)) {
 				p_bullet->SetRect(this->rect_.x + width_frame - 16, rect_.y + height_frame);
-				p_bullet->set_y_val(20);
+				p_bullet->set_y_val(5);
+				p_bullet->set_damage_val(5);
 				p_bullet->set_is_move(true);
-				
+
 				p_bullet_list.push_back(p_bullet);
+				
 			}
 			else {
 				delete p_bullet;
@@ -154,6 +161,7 @@ void Player::HandleInputAction(SDL_Event events, SDL_Renderer* render) {
 	}
 
 }
+
 
 
 void Player::Update(float deltaTime) {
@@ -169,4 +177,17 @@ void Player::Update(float deltaTime) {
 			x_pos += moveSpeed;
 		}
 	}
+	rect_.x = static_cast<int>(x_pos);
+	rect_.y = static_cast<int>(y_pos);
+}
+
+SDL_Rect Player::GetRectFrame()
+{
+	SDL_Rect rect;
+	rect.x = rect_.x;
+	rect.y = rect_.y;
+	rect.w = width_frame;
+	rect.h = height_frame;
+
+	return rect;
 }
