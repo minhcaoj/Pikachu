@@ -38,7 +38,6 @@ Enemy enemy;
 std::vector<Enemy*> MakeEnemyList()
 {
     Uint32 currentTime = SDL_GetTicks();
-    std::cout <<"Current time: " << currentTime << std::endl;
     std::vector<Enemy*> list_enemy;
     Enemy* enemy_objs = new Enemy();
     
@@ -137,7 +136,7 @@ int main(int argv, char* argc[]) {
     p_player.set_clips();
 
     std::vector<Enemy*> enemy_lists = MakeEnemyList();
-    std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
+    
     
 
     InfiniteScrollingMap map(gRenderer, "res/Grass-map-1.png", "res/Grass-map-2.png");
@@ -204,7 +203,7 @@ int main(int argv, char* argc[]) {
                 if (p_enemy->get_y_pos() > SCREEN_HEIGHT)
                 {
                     enemy_lists.erase(enemy_lists.begin() + i);
-                    std::cout << "Enemy count after" << enemy_lists.size() << std::endl;
+                    
                 }
             }
         }
@@ -217,12 +216,15 @@ int main(int argv, char* argc[]) {
         // Debug: in số lượng quái hiện có
         /*std::cout << "Enemies count: " << spawnManager.GetEnemies().size() << std::endl;*/
 
+        std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
+        std::cout << "BulletSize: " << bullet_lists.size() << std::endl;
         for (int i = 0; i < bullet_lists.size(); i++)
         {
-            std::cout << "BulletSize: " << bullet_lists.size()<< std::endl;
             Bullet* p_bullet = bullet_lists.at(i);
-            if (p_bullet)
+            if (p_bullet && p_bullet->get_is_move())
             {
+                SDL_Rect bRect = p_bullet->GetRect();
+
                 for (int t = 0; t < enemy_lists.size(); t++)
                 {
                     Enemy* p_enemy = enemy_lists.at(t);
@@ -234,18 +236,27 @@ int main(int argv, char* argc[]) {
                         eRect.w = p_enemy->get_width_frame();
                         eRect.h = p_enemy->get_height_frame();
 
-                        SDL_Rect bRect = p_bullet->GetRect();
-
-                        bool bCol = collision.AABB(eRect, bRect);
+                        bool bCol = SDLCommonFunc::CheckCollision(bRect, eRect);
                         if (bCol)
                         {
-                            std::cout << "IsCollide" << std::endl;
-                        }
+                            float damage = p_bullet->get_damage_val();
+                            p_enemy->takeDamage(damage); // ✅ only apply damage once
+                            p_bullet->set_is_move(false); // stop bullet
+                            std::cout << "Hit enemy! Damage: " << damage << std::endl;
 
+                            // Optional: remove enemy if dead
+                            if (p_enemy->get_health() <= 0) {
+                                enemy_lists.erase(enemy_lists.begin() + t);
+                                --t; // prevent skipping next enemy
+                            }
+
+                            break; // only hit one enemy per bullet
+                        }
                     }
                 }
             }
         }
+
 
 
         SDL_RenderPresent(gRenderer);

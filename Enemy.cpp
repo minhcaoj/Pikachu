@@ -85,36 +85,7 @@ void Enemy::Update(float scroll_speed)
 	}
 }
 
-void Enemy::takeDamage(std::vector<Enemy*> enemy, std::vector<Bullet*> bullet, float damage)
+void Enemy::takeDamage(float damage)
 {
-	std::vector<float> enemy_health_val;
-	for (int i = 0; i < enemy.size(); i++)
-	{
-		Enemy* p_enemy = enemy.at(i);
-		if (enemy_health_val.at(i) == NULL) {
-			enemy_health_val.push_back(p_enemy->get_health());
-		}
-		if (p_enemy)
-		{
-			
-				for (int t = 0; t < bullet.size(); t++)
-				{
-					Bullet* p_bullet = bullet.at(t);
-					if (p_bullet)
-					{
-
-						damage = p_bullet->get_damage_val();
-						enemy_health_val.at(i) -= damage;
-						if (enemy_health_val.at(i) <= 0)
-						{
-							enemy.erase(enemy.begin() + i);
-						}
-					}
-				}
-			
-			
-			
-			
-		}
-	}
+	health -= damage;
 }

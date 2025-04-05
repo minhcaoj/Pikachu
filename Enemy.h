@@ -30,7 +30,7 @@ public:
 	int get_height_frame() const { return height_frame; }
 
 	void Update(float scroll_speed);
-	void takeDamage(std::vector<Enemy*> enemy, std::vector<Bullet*> bullet, float damage);
+	void takeDamage(float damage);
 
 
 private:
