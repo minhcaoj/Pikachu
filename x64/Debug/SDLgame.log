@@ -1,11 +1,4 @@
-﻿  Enemy.cpp
-C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.h(34,16): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
-  (compiling source file 'Enemy.cpp')
-  
-C:\Users\Acer\source\repos\SDLgame\SDLgame\Enemy.cpp(66,37): warning C4018: '>': signed/unsigned mismatch
-C:\Users\Acer\source\repos\SDLgame\SDLgame\Enemy.cpp(67,13): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\Enemy.cpp(68,13): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  main.cpp
+﻿  main.cpp
 C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.h(34,16): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
   (compiling source file 'main.cpp')
   

@@ -15,7 +15,7 @@ const int FRAME_DELAY_GAME = 1000 / 60;  // 60 FPS
 Uint32 frameStart;
 int frameTime;
 
-float scroll_speed = 100.0f;
+float scroll_speed = 90.0f;
 
 int x = SCREEN_WIDTH / 2 - 30;  // Player position
 int y = 550;
@@ -240,7 +240,7 @@ int main(int argv, char* argc[]) {
                         if (bCol)
                         {
                             float damage = p_bullet->get_damage_val();
-                            p_enemy->takeDamage(damage); // ✅ only apply damage once
+                            p_enemy->takeDamage(damage); 
                             p_bullet->set_is_move(false); // stop bullet
                             std::cout << "Hit enemy! Damage: " << damage << std::endl;
 
