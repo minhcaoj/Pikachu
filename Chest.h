@@ -2,7 +2,7 @@
 #include "CommonFunc.h"
 #include "BaseObject.h"
 
-#define CHEST_FRAME_NUM 4
+#define CHEST_FRAME_NUM 3
 
 class Chest:public BaseObject
 {
@@ -21,7 +21,10 @@ public:
 
 	void set_clips();
 	bool LoadImg(std::string path, SDL_Renderer* render);
-
+	void Update(float scroll_speed);
+	void Show(SDL_Renderer* render);
+	void Chest_open_show(SDL_Renderer* render);
+	
 
 private:
 	float x_val;
@@ -36,5 +39,5 @@ private:
 	int frameDelay;
 	bool is_close;
 	bool is_move;
-
+	int scale;
 };

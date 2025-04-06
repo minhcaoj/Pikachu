@@ -6,7 +6,7 @@
 #include "Enemy.h"
 #include "InfiniteMap.h"
 #include "Collision.h"
-
+#include "Chest.h"
 
 // Global variables
 
@@ -27,6 +27,7 @@ const int frameDelay = 200;   // Time (ms) per frame
 const int speed = 2;
 float lastTime = SDL_GetTicks() / 1000.0f;
 float lastSpawnTime = 0.0f;
+float lastChestSpawnTime = 0.0f;
 
 BaseObject gBackground;
 SDL_Texture* PlayerStanding;
@@ -37,7 +38,7 @@ Enemy enemy;
 
 std::vector<Enemy*> MakeEnemyList()
 {
-    Uint32 currentTime = SDL_GetTicks();
+    
     std::vector<Enemy*> list_enemy;
     Enemy* enemy_objs = new Enemy();
     
@@ -61,7 +62,31 @@ std::vector<Enemy*> MakeEnemyList()
     return list_enemy;
 }
 
+std::vector<Chest*> MakeChestList()
+{
+    
+    std::vector<Chest*> list_chest;
+    Chest* objs_chest = new Chest();
 
+
+    for (int i = 0; i < list_chest.size(); i++)
+    {
+        Chest* p_chest= objs_chest + i;
+        if (p_chest != NULL)
+        {
+            p_chest->LoadImg("res/Chest-close.png", gRenderer);
+            
+            p_chest->set_x_pos((rand() % 2) ? 250 : 350);
+            p_chest->set_y_pos(-32);
+
+
+            list_chest.push_back(p_chest);
+        }
+    }
+
+
+    return list_chest;
+}
 
 
 
@@ -136,7 +161,7 @@ int main(int argv, char* argc[]) {
     p_player.set_clips();
 
     std::vector<Enemy*> enemy_lists = MakeEnemyList();
-    
+    std::vector<Chest*> chest_lists = MakeChestList();
     
 
     InfiniteScrollingMap map(gRenderer, "res/Grass-map-1.png", "res/Grass-map-2.png");
@@ -169,6 +194,21 @@ int main(int argv, char* argc[]) {
              lastSpawnTime = currentTime;
         }
         
+        if (currentTime - lastChestSpawnTime >= 3000) {
+            Chest* p_chest = new Chest();
+            if (p_chest != NULL)
+            {
+                p_chest->LoadImg("res/Chest-close.png", gRenderer);
+                
+                p_chest->set_x_pos((rand() % 2) ? 250 : 350);
+                p_chest->set_y_pos(-32);
+
+
+                chest_lists.push_back(p_chest);
+
+            }
+            lastChestSpawnTime = currentTime;
+        }
 
         // Xử lý sự kiện
         while (SDL_PollEvent(&gEvent) != 0) {
@@ -199,7 +239,7 @@ int main(int argv, char* argc[]) {
             if (p_enemy != NULL)
             {
                 p_enemy->Show(gRenderer);
-                p_enemy->Update(scroll_speed / 100);
+                p_enemy->Update(scroll_speed / 80);
                 if (p_enemy->get_y_pos() > SCREEN_HEIGHT)
                 {
                     enemy_lists.erase(enemy_lists.begin() + i);
@@ -207,7 +247,23 @@ int main(int argv, char* argc[]) {
                 }
             }
         }
-        
+        // Spawn chest
+        for (int i = 0; i < chest_lists.size();i++)
+        {
+
+            Chest* p_chest = chest_lists.at(i);
+
+            if (p_chest != NULL)
+            {
+                p_chest->Show(gRenderer);
+                p_chest->Update(scroll_speed /80);
+                if (p_chest->get_y_pos() > SCREEN_HEIGHT)
+                {
+                    chest_lists.erase(chest_lists.begin() + i);
+                    std::cout << "ChestSize: " << chest_lists.size() << std::endl;
+                }
+            }
+        }
 
         // 4. Player và đạn
         p_player.HandleBullet(gRenderer);
@@ -217,7 +273,7 @@ int main(int argv, char* argc[]) {
         /*std::cout << "Enemies count: " << spawnManager.GetEnemies().size() << std::endl;*/
 
         std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
-        std::cout << "BulletSize: " << bullet_lists.size() << std::endl;
+       
         for (int i = 0; i < bullet_lists.size(); i++)
         {
             Bullet* p_bullet = bullet_lists.at(i);
