@@ -28,6 +28,10 @@ const int speed = 2;
 float lastTime = SDL_GetTicks() / 1000.0f;
 float lastSpawnTime = 0.0f;
 float lastChestSpawnTime = 0.0f;
+//player Colliding
+bool isColliding = false;
+Uint32 lastDamageTime = 0;
+Uint32 damageCooldown = 2000;
 
 BaseObject gBackground;
 SDL_Texture* PlayerStanding;
@@ -260,7 +264,7 @@ int main(int argv, char* argc[]) {
                 if (p_chest->get_y_pos() > SCREEN_HEIGHT)
                 {
                     chest_lists.erase(chest_lists.begin() + i);
-                    std::cout << "ChestSize: " << chest_lists.size() << std::endl;
+                    
                 }
             }
         }
@@ -273,24 +277,29 @@ int main(int argv, char* argc[]) {
         /*std::cout << "Enemies count: " << spawnManager.GetEnemies().size() << std::endl;*/
 
         std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
-       
-        for (int i = 0; i < bullet_lists.size(); i++)
+        SDL_Rect pRect = p_player.GetRect();
+        
+        for (int i = 0; i < enemy_lists.size(); i++)
         {
-            Bullet* p_bullet = bullet_lists.at(i);
-            if (p_bullet && p_bullet->get_is_move())
+            
+            Enemy* p_enemy = enemy_lists.at(i);
+            if (p_enemy )
             {
-                SDL_Rect bRect = p_bullet->GetRect();
+                SDL_Rect eRect;
+                eRect.x = p_enemy->GetRect().x;
+                eRect.y = p_enemy->GetRect().y;
+                eRect.w = p_enemy->get_width_frame();
+                eRect.h = p_enemy->get_height_frame();
+                
+                
 
-                for (int t = 0; t < enemy_lists.size(); t++)
+
+                for (int t = 0; t < bullet_lists.size(); t++)
                 {
-                    Enemy* p_enemy = enemy_lists.at(t);
-                    if (p_enemy)
+                    Bullet* p_bullet = bullet_lists.at(i);
+                    if (p_bullet && p_bullet->get_is_move())
                     {
-                        SDL_Rect eRect;
-                        eRect.x = p_enemy->GetRect().x;
-                        eRect.y = p_enemy->GetRect().y;
-                        eRect.w = p_enemy->get_width_frame();
-                        eRect.h = p_enemy->get_height_frame();
+                        SDL_Rect bRect = p_bullet->GetRect();
 
                         bool bCol = SDLCommonFunc::CheckCollision(bRect, eRect);
                         if (bCol)
@@ -309,6 +318,23 @@ int main(int argv, char* argc[]) {
                             break; // only hit one enemy per bullet
                         }
                     }
+                }
+                bool pCol = SDLCommonFunc::CheckCollision(pRect, eRect);
+                if (pCol && !isColliding && (currentTime - lastDamageTime >= damageCooldown))
+                {
+                    isColliding = true;
+                    float damage = p_enemy->get_health();
+                    p_player.takeDamage(damage);
+                    lastDamageTime = currentTime;
+                    std::cout << "Player health: "<< p_player.get_health_val() << std::endl;
+                    if (p_player.get_health_val() <= 0)
+                    {
+                        std::cout << "GAME OVER" << std::endl;
+                    }
+                }
+                else if (!pCol && isColliding)
+                {
+                    isColliding = false;
                 }
             }
         }

@@ -10,6 +10,8 @@ class Player : public BaseObject
 public:
 	Player();
 	~Player();
+	int get_health_val() const { return PlayerHealth; }
+	void set_health_val(const int& player_health) { PlayerHealth = player_health; }
 	
 	bool LoadImg(std::string path, SDL_Renderer* render);
 	void Show(SDL_Renderer* render);
@@ -18,7 +20,8 @@ public:
 	void SetSclae(float scale) { scaleFactor = scale; }
 	void Update(float deltaTime);
 	void HandleBullet(SDL_Renderer* render);
-	void RemoveBullet(int idx);
+	void takeDamage(float damage);
+	
 	SDL_Rect GetRectFrame();
 	void set_bullet_lists(std::vector<Bullet*> bullet_list)
 	{
@@ -45,6 +48,7 @@ private:
 	int frameDelay;
 	float speed;
 	int scaleFactor;
+	int PlayerHealth;
 };
 
 #endif

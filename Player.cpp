@@ -20,7 +20,7 @@ Player::Player()
 	speed = 100.0f;
 	scaleFactor = 2;
 	bulletLevel = 1;
-	
+	PlayerHealth = 100;
 	
 }
 
@@ -190,4 +190,9 @@ SDL_Rect Player::GetRectFrame()
 	rect.h = height_frame;
 
 	return rect;
+}
+
+void Player::takeDamage(float damage)
+{
+	PlayerHealth -= damage;
 }

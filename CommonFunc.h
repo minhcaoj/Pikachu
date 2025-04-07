@@ -40,6 +40,7 @@ typedef struct Input
 // Animation control
 namespace SDLCommonFunc {
 	bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2);
+	
 }
 
 
