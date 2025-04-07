@@ -66,11 +66,12 @@ void Enemy::Show(SDL_Renderer* render)
 	if (SDL_GetTicks() - lastFrameTime > frameDelay) {
 		rect_.x = x_pos;
 		rect_.y = y_pos;
+		
 		frame = (frame + 1) % 4;
 		lastFrameTime = SDL_GetTicks();
 	}
 	SDL_Rect* currentClip = &frame_clip[frame];
-	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame, height_frame };
+	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame*1.5, height_frame*1.5 };
 	SDL_RenderCopy(render, p_object, currentClip, &renderQuad);
 }
 

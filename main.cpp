@@ -30,6 +30,8 @@ float lastSpawnTime = 0.0f;
 float lastChestSpawnTime = 0.0f;
 //player Colliding
 bool isColliding = false;
+
+
 Uint32 lastDamageTime = 0;
 Uint32 damageCooldown = 2000;
 
@@ -78,10 +80,11 @@ std::vector<Chest*> MakeChestList()
         Chest* p_chest= objs_chest + i;
         if (p_chest != NULL)
         {
-            p_chest->LoadImg("res/Chest-close.png", gRenderer);
             
+            p_chest->LoadImg("res/Chest-open.png", gRenderer);
+            p_chest->set_clips();
             p_chest->set_x_pos((rand() % 2) ? 250 : 350);
-            p_chest->set_y_pos(-32);
+            p_chest->set_y_pos(-50);
 
 
             list_chest.push_back(p_chest);
@@ -188,7 +191,7 @@ int main(int argv, char* argc[]) {
         {
             p_enemy->LoadImg("res/Pokemon/Fire + stone dragon/sprite9_idle.png", gRenderer);
             p_enemy->set_clips();
-            p_enemy->set_x_pos((rand() % 2) ? 250 : 350);
+            p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
             p_enemy->set_y_pos(-100);
 
 
@@ -198,13 +201,13 @@ int main(int argv, char* argc[]) {
              lastSpawnTime = currentTime;
         }
         
-        if (currentTime - lastChestSpawnTime >= 3000) {
+        if (currentTime - lastChestSpawnTime >= 5000) {
             Chest* p_chest = new Chest();
             if (p_chest != NULL)
             {
-                p_chest->LoadImg("res/Chest-close.png", gRenderer);
-                
-                p_chest->set_x_pos((rand() % 2) ? 250 : 350);
+                p_chest->LoadImg("res/Chest-open.png", gRenderer);
+                p_chest->set_clips();
+                p_chest->set_x_pos((rand() % 2) ? 220 : 380);
                 p_chest->set_y_pos(-32);
 
 
@@ -259,7 +262,7 @@ int main(int argv, char* argc[]) {
 
             if (p_chest != NULL)
             {
-                p_chest->Show(gRenderer);
+                p_chest->Chest_open_show(gRenderer, deltaTime);
                 p_chest->Update(scroll_speed /80);
                 if (p_chest->get_y_pos() > SCREEN_HEIGHT)
                 {
@@ -268,7 +271,7 @@ int main(int argv, char* argc[]) {
                 }
             }
         }
-
+        std::vector<bool> chestCollisionStates(chest_lists.size(), false);
         // 4. Player và đạn
         p_player.HandleBullet(gRenderer);
         p_player.Show(gRenderer);
@@ -290,13 +293,14 @@ int main(int argv, char* argc[]) {
                 eRect.y = p_enemy->GetRect().y;
                 eRect.w = p_enemy->get_width_frame();
                 eRect.h = p_enemy->get_height_frame();
-                
+                eRect.w *= 1.5;
+                eRect.h *= 1.5;
                 
 
 
                 for (int t = 0; t < bullet_lists.size(); t++)
                 {
-                    Bullet* p_bullet = bullet_lists.at(i);
+                    Bullet* p_bullet = bullet_lists.at(t);
                     if (p_bullet && p_bullet->get_is_move())
                     {
                         SDL_Rect bRect = p_bullet->GetRect();
@@ -319,12 +323,14 @@ int main(int argv, char* argc[]) {
                         }
                     }
                 }
+                // Player and enemies collide
                 bool pCol = SDLCommonFunc::CheckCollision(pRect, eRect);
                 if (pCol && !isColliding && (currentTime - lastDamageTime >= damageCooldown))
                 {
                     isColliding = true;
                     float damage = p_enemy->get_health();
                     p_player.takeDamage(damage);
+                    enemy_lists.erase(enemy_lists.begin() + i);
                     lastDamageTime = currentTime;
                     std::cout << "Player health: "<< p_player.get_health_val() << std::endl;
                     if (p_player.get_health_val() <= 0)
@@ -336,6 +342,54 @@ int main(int argv, char* argc[]) {
                 {
                     isColliding = false;
                 }
+
+                //Chest and player collide
+                for (int r = 0; r < chest_lists.size(); r++)
+                {
+                    Chest* p_chest = chest_lists.at(r);
+                    if (p_chest)
+                    {
+                        
+                        SDL_Rect cRect;
+                        cRect.x = p_chest->get_x_pos();
+                        cRect.y = p_chest->get_y_pos();
+                        cRect.w = p_chest->get_height_frame();
+                        cRect.h = p_chest->get_width_frame();
+                        cRect.w *= 2;
+                        cRect.h *= 2;
+                        bool pCol2 = SDLCommonFunc::CheckCollision(pRect, cRect);
+                        bool cCol = SDLCommonFunc::CheckCollision(cRect, eRect);
+                        if (cCol)
+                        {
+                            chest_lists.erase(chest_lists.begin() + r);
+                            r--;
+                        }
+                        else {
+                            if (pCol2 && !chestCollisionStates[r] && (currentTime - lastDamageTime >= damageCooldown))
+                            {
+                                chestCollisionStates[r] = true;
+                                std::cout << "Chest " << r << " and Player collide" << std::endl;
+                                lastDamageTime = currentTime;
+                                if (!p_chest->get_is_open()) {
+                                    
+                                    std::cout << "Is Open" << std::endl;
+                                        p_chest->Open();
+                                       
+                                        
+                                   
+                                   
+                                }
+                            }
+                            else if (!pCol2 && chestCollisionStates[r])
+                            {
+                                chestCollisionStates[r] = false;
+                            }
+                        }
+
+                        
+                    }
+                }
+
             }
         }
 
