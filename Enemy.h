@@ -20,8 +20,8 @@ public:
 	float get_x_pos() const { return x_pos; }
 	float get_y_pos() const { return y_pos; }
 	
-	void set_health_val(const float& healthVal) { health = healthVal; }
-	float get_health() const { return health; }
+	void set_health_val(const int& healthVal) { health = healthVal; }
+	int get_health() const { return health; }
 
 	void set_clips();
 	bool LoadImg(std::string path, SDL_Renderer* render);
@@ -29,8 +29,8 @@ public:
 	int get_width_frame() const { return width_frame; }
 	int get_height_frame() const { return height_frame; }
 
-	void Update(float scroll_speed);
-	void takeDamage(float damage);
+	void Update(float scroll_speed, float deltaTime);
+	void takeDamage(int damage);
 
 
 private:
@@ -44,6 +44,6 @@ private:
 	SDL_Rect frame_clip[ENEMY_FRAME_NUM];
 	Uint32 lastFrameTime;
 	int frameDelay;
-	float health;
+	int health;
 
 };

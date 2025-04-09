@@ -49,6 +49,7 @@ private:
 	float speed;
 	int scaleFactor;
 	int PlayerHealth;
+	float lastTime;
 };
 
 #endif

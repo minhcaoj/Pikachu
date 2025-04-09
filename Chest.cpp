@@ -87,9 +87,9 @@ bool Chest::LoadImg(std::string path, SDL_Renderer* render)
 		}
 	}
 
-void Chest::Update(float scroll_speed)
+void Chest::Update(float scroll_speed, float deltaTime)
 {
-	y_pos += scroll_speed;
+	y_pos += scroll_speed*deltaTime;
 	rect_.y = static_cast<int>(y_pos);
 	
 }

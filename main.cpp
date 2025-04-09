@@ -7,7 +7,7 @@
 #include "InfiniteMap.h"
 #include "Collision.h"
 #include "Chest.h"
-
+#include "TextObject.h"
 // Global variables
 
 const int FRAME_DELAY_GAME = 1000 / 60;  // 60 FPS
@@ -41,6 +41,10 @@ Itachi loadItachi;
 
 Bullet Pokeball;
 Enemy enemy;
+
+TTF_Font* fontScore = NULL;
+TTF_Font* fontEnemyHealth = NULL;
+TTF_Font* fontPlayerHealth = NULL;
 
 std::vector<Enemy*> MakeEnemyList()
 {
@@ -132,6 +136,27 @@ bool Init()
                 success = false;
             }
         }
+		if (TTF_Init() == -1) {
+			success = false;
+		}
+		fontScore = TTF_OpenFont("font/dlxfont_.ttf", 20);
+		fontEnemyHealth = TTF_OpenFont("font/dlxfont_.ttf", 20);
+		fontPlayerHealth = TTF_OpenFont("font/dlxfont_.ttf", 20);
+		if (fontScore == NULL)
+		{
+			std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+			success = false;
+		}
+        if (fontEnemyHealth == NULL)
+        {
+			std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+			success = false;
+		}
+        if (fontPlayerHealth == NULL)
+        {
+			std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+			success = false;
+        }
     }
     return success;
 }
@@ -175,7 +200,16 @@ int main(int argv, char* argc[]) {
 
     
     
-    //loadItachi.LoadFrames(gRenderer);
+    // Text
+
+    TextObject score_game;
+	TextObject player_health;
+    TextObject enemy_health;
+    
+	score_game.SetColor(TextObject::WHITE_TEXT);
+	player_health.SetColor(TextObject::WHITE_TEXT);
+	enemy_health.SetColor(TextObject::WHITE_TEXT);
+
     bool gameStop = false;
 
 
@@ -246,7 +280,7 @@ int main(int argv, char* argc[]) {
             if (p_enemy != NULL)
             {
                 p_enemy->Show(gRenderer);
-                p_enemy->Update(scroll_speed / 80);
+                p_enemy->Update(scroll_speed, deltaTime);
                 if (p_enemy->get_y_pos() > SCREEN_HEIGHT)
                 {
                     enemy_lists.erase(enemy_lists.begin() + i);
@@ -263,7 +297,7 @@ int main(int argv, char* argc[]) {
             if (p_chest != NULL)
             {
                 p_chest->Chest_open_show(gRenderer, deltaTime);
-                p_chest->Update(scroll_speed /80);
+                p_chest->Update(scroll_speed, deltaTime);
                 if (p_chest->get_y_pos() > SCREEN_HEIGHT)
                 {
                     chest_lists.erase(chest_lists.begin() + i);
@@ -281,14 +315,15 @@ int main(int argv, char* argc[]) {
 
         std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
         SDL_Rect pRect = p_player.GetRect();
+        SDL_Rect eRect;
         
+		// Bullet and enemy collide
         for (int i = 0; i < enemy_lists.size(); i++)
         {
             
             Enemy* p_enemy = enemy_lists.at(i);
             if (p_enemy )
             {
-                SDL_Rect eRect;
                 eRect.x = p_enemy->GetRect().x;
                 eRect.y = p_enemy->GetRect().y;
                 eRect.w = p_enemy->get_width_frame();
@@ -313,10 +348,14 @@ int main(int argv, char* argc[]) {
                             p_bullet->set_is_move(false); // stop bullet
                             std::cout << "Hit enemy! Damage: " << damage << std::endl;
 
-                            // Optional: remove enemy if dead
-                            if (p_enemy->get_health() <= 0) {
-                                enemy_lists.erase(enemy_lists.begin() + t);
-                                --t; // prevent skipping next enemy
+                            for (auto it = enemy_lists.begin(); it != enemy_lists.end();) {
+                                Enemy* p_enemy = *it;
+                                if (p_enemy->get_health() <= 0) {
+                                    it = enemy_lists.erase(it); // Xóa và cập nhật iterator
+                                }
+                                else {
+                                    ++it;
+                                }
                             }
 
                             break; // only hit one enemy per bullet
@@ -342,59 +381,87 @@ int main(int argv, char* argc[]) {
                 {
                     isColliding = false;
                 }
+            
+            }
+        }
 
-                //Chest and player collide
-                for (int r = 0; r < chest_lists.size(); r++)
+        // Player and Chest collide
+        for (int r = 0; r < chest_lists.size(); r++)
+        {
+            Chest* p_chest = chest_lists.at(r);
+            if (p_chest)
+            {
+
+                SDL_Rect cRect;
+                cRect.x = p_chest->get_x_pos();
+                cRect.y = p_chest->get_y_pos();
+                cRect.w = p_chest->get_height_frame();
+                cRect.h = p_chest->get_width_frame();
+                cRect.w *= 2;
+                cRect.h *= 2;
+                bool pCol2 = SDLCommonFunc::CheckCollision(pRect, cRect);
+                //std::cout << "Player and Chest collide" << std::endl;
+                bool cCol = SDLCommonFunc::CheckCollision(cRect, eRect);
+                if (cCol)
                 {
-                    Chest* p_chest = chest_lists.at(r);
-                    if (p_chest)
+                    chest_lists.erase(chest_lists.begin() + r);
+                    r--;
+                }
+                else {
+                    if (pCol2 && !chestCollisionStates[r] && (currentTime - lastDamageTime >= damageCooldown))
                     {
-                        
-                        SDL_Rect cRect;
-                        cRect.x = p_chest->get_x_pos();
-                        cRect.y = p_chest->get_y_pos();
-                        cRect.w = p_chest->get_height_frame();
-                        cRect.h = p_chest->get_width_frame();
-                        cRect.w *= 2;
-                        cRect.h *= 2;
-                        bool pCol2 = SDLCommonFunc::CheckCollision(pRect, cRect);
-                        bool cCol = SDLCommonFunc::CheckCollision(cRect, eRect);
-                        if (cCol)
-                        {
-                            chest_lists.erase(chest_lists.begin() + r);
-                            r--;
-                        }
-                        else {
-                            if (pCol2 && !chestCollisionStates[r] && (currentTime - lastDamageTime >= damageCooldown))
-                            {
-                                chestCollisionStates[r] = true;
-                                std::cout << "Chest " << r << " and Player collide" << std::endl;
-                                lastDamageTime = currentTime;
-                                if (!p_chest->get_is_open()) {
-                                    
-                                    std::cout << "Is Open" << std::endl;
-                                        p_chest->Open();
-                                       
-                                        
-                                   
-                                   
-                                }
-                            }
-                            else if (!pCol2 && chestCollisionStates[r])
-                            {
-                                chestCollisionStates[r] = false;
-                            }
-                        }
+                        chestCollisionStates[r] = true;
+                        std::cout << "Chest " << r << " and Player collide" << std::endl;
+                        lastDamageTime = currentTime;
+                        if (!p_chest->get_is_open()) {
 
-                        
+                            std::cout << "Is Open" << std::endl;
+                            p_chest->Open();
+
+
+
+
+                        }
+                    }
+                    else if (!pCol2 && chestCollisionStates[r])
+                    {
+                        chestCollisionStates[r] = false;
                     }
                 }
+
 
             }
         }
 
+        //Show score
+        std::string str_score = "Score: ";
+		Uint32 score_val = SDL_GetTicks() / 1000;
+	
+			std::string str_val = std::to_string(score_val);
+			str_score += str_val;
 
+			score_game.setText(str_score);
+			score_game.loadFromRenderText(fontScore, gRenderer);
+			score_game.RenderText(gRenderer, SCREEN_WIDTH / 2 - 90 , 10);
+        
+			// Show player health
+			std::string str_player_health = std::to_string(p_player.get_health_val() - 1);
+            player_health.setText(str_player_health);
+            player_health.loadFromRenderText(fontPlayerHealth, gRenderer);
+			player_health.RenderText(gRenderer, p_player.GetRect().x + 13, p_player.GetRect().y - 32);
+			// Show enemy health
+            for (int i = 0; i < enemy_lists.size(); i++)
+            {
 
+                Enemy* p_enemy = enemy_lists.at(i);
+                if (p_enemy)
+                {
+                    std::string str_enemy_health = std::to_string(p_enemy->get_health());
+                    enemy_health.setText(str_enemy_health);
+                    enemy_health.loadFromRenderText(fontEnemyHealth, gRenderer);
+                    enemy_health.RenderText(gRenderer, p_enemy->GetRect().x + 40, p_enemy->GetRect().y + 140);
+                }
+            }
         SDL_RenderPresent(gRenderer);
 
         // Giữ ổn định FPS

@@ -22,7 +22,7 @@ public:
 
 	void set_clips();
 	bool LoadImg(std::string path, SDL_Renderer* render);
-	void Update(float scroll_speed);
+	void Update(float scroll_speed, float deltaTime);
 	void Show(SDL_Renderer* render);
 	void Chest_open_show(SDL_Renderer* render, Uint32 deltaTime);
 	void Open();

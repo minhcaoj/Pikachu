@@ -75,10 +75,10 @@ void Enemy::Show(SDL_Renderer* render)
 	SDL_RenderCopy(render, p_object, currentClip, &renderQuad);
 }
 
-void Enemy::Update(float scroll_speed)
+void Enemy::Update(float scroll_speed, float deltaTime)
 {
 	
-	y_pos += scroll_speed;
+	y_pos += scroll_speed* deltaTime;
 	rect_.y = static_cast<int>(y_pos);
 	if (y_pos > SCREEN_HEIGHT)
 	{
@@ -86,7 +86,7 @@ void Enemy::Update(float scroll_speed)
 	}
 }
 
-void Enemy::takeDamage(float damage)
+void Enemy::takeDamage(int damage)
 {
 	health -= damage;
 }

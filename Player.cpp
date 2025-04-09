@@ -21,7 +21,7 @@ Player::Player()
 	scaleFactor = 2;
 	bulletLevel = 1;
 	PlayerHealth = 100;
-	
+	lastTime = SDL_GetTicks() / 1000.0f;
 }
 
 Player::~Player()
@@ -144,6 +144,9 @@ void Player::HandleInputAction(SDL_Event events, SDL_Renderer* render) {
 			Bullet* p_bullet = new Bullet();
 
 			if (p_bullet != nullptr && p_bullet->LoadImg("res//Ball//poke ball.png", render,0.05)) {
+
+				Uint32 currentTime = SDL_GetTicks();
+				float deltaTime = (currentTime - lastTime) / 1000.0f;
 				p_bullet->SetRect(this->rect_.x + width_frame - 16, rect_.y + height_frame);
 				p_bullet->set_y_val(5);
 				p_bullet->set_damage_val(5);
