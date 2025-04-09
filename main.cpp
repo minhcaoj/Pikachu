@@ -463,7 +463,7 @@ int main(int argv, char* argc[]) {
                 }
             }
         SDL_RenderPresent(gRenderer);
-
+        // Hello
         // Giữ ổn định FPS
         frameTime = SDL_GetTicks() - frameStart;
         if (frameTime < FRAME_DELAY_GAME) {
