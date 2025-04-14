@@ -66,16 +66,20 @@ bool Chest::LoadImg(std::string path, SDL_Renderer* render)
 				currentFrame = 2;  // Đảm bảo không vượt quá số frame hiện có
 			}
 		}
-		//else {
-		//	currentFrame = 0;  // Nếu chưa mở, luôn hiển thị frame "đóng"
-		//}
+		else {
+			currentFrame = 0;  // Nếu chưa mở, luôn hiển thị frame "đóng"
+		}
 
 		rect_.x = x_pos;
 		rect_.y = y_pos;
-
+		width_frame = 32 * scale;
+		height_frame = 32 * scale;
 		SDL_Rect* currentClip = &frame_clip[currentFrame];
-		SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame * scale, height_frame * scale };
+		SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame, height_frame};
 		SDL_RenderCopy(render, p_object, currentClip, &renderQuad);
+
+		//SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
+		//SDL_RenderDrawRect(render, &renderQuad);// Set color to black
 	}
 
 
@@ -98,6 +102,7 @@ void Chest::Show(SDL_Renderer* render)
 {
 	rect_.x = x_pos;
 	rect_.y = y_pos;
+	
 	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame*scale, height_frame*scale };
 	SDL_RenderCopy(render, p_object, NULL, &renderQuad);
 }

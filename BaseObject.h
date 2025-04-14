@@ -15,6 +15,7 @@ public:
 	virtual void Render(SDL_Renderer* des, const SDL_Rect* clip = NULL);
 	void Free();
 
+
 	SDL_Rect rect_;
 	SDL_Texture* p_object;
 };

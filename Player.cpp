@@ -81,10 +81,17 @@ void Player::Show(SDL_Renderer* render)
 		
 
 	}
+	width_frame = 32 * scaleFactor;
+	height_frame = 32 * scaleFactor;
+	rect_.w = width_frame;
+	rect_.h = height_frame;
 
 	SDL_Rect* current_clip = &frame_clip[frame];
-	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame*scaleFactor, height_frame*scaleFactor };
+	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame, height_frame };
 	SDL_RenderCopy(render, p_object, current_clip, &renderQuad);
+
+	//SDL_SetRenderDrawColor(render, 255, 0, 0, 255); // Set color to red
+	//SDL_RenderDrawRect(render, &renderQuad);
 
 }
 
@@ -147,8 +154,8 @@ void Player::HandleInputAction(SDL_Event events, SDL_Renderer* render) {
 
 				Uint32 currentTime = SDL_GetTicks();
 				float deltaTime = (currentTime - lastTime) / 1000.0f;
-				p_bullet->SetRect(this->rect_.x + width_frame - 16, rect_.y + height_frame);
-				p_bullet->set_y_val(5);
+				p_bullet->SetRect(this->rect_.x + 10, rect_.y + 10);
+				p_bullet->set_y_val(2);
 				p_bullet->set_damage_val(5);
 				p_bullet->set_is_move(true);
 

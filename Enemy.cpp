@@ -70,9 +70,14 @@ void Enemy::Show(SDL_Renderer* render)
 		frame = (frame + 1) % 4;
 		lastFrameTime = SDL_GetTicks();
 	}
+	width_frame = 96*1.5 ;
+	height_frame = 96*1.5;
 	SDL_Rect* currentClip = &frame_clip[frame];
-	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame*1.5, height_frame*1.5 };
+	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame, height_frame };
 	SDL_RenderCopy(render, p_object, currentClip, &renderQuad);
+
+	/*SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
+	SDL_RenderDrawRect(render, &rect_);*/
 }
 
 void Enemy::Update(float scroll_speed, float deltaTime)
