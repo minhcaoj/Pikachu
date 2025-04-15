@@ -20,7 +20,7 @@ Player::Player()
 	speed = 100.0f;
 	scaleFactor = 2;
 	bulletLevel = 1;
-	PlayerHealth = 100;
+	PlayerHealth = 13;
 	lastTime = SDL_GetTicks() / 1000.0f;
 }
 

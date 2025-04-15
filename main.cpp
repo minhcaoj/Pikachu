@@ -32,10 +32,12 @@ float lastSpawnTime = 0.0f;
 float lastChestSpawnTime = 0.0f;
 //player Colliding
 bool isColliding = false;
+bool timing = true;
 
 
 Uint32 lastDamageTime = 0;
 Uint32 damageCooldown = 2000;
+Uint32 startTime = 0;
 
 BaseObject gBackground;
 SDL_Texture* PlayerStanding;
@@ -47,6 +49,8 @@ Enemy enemy;
 TTF_Font* fontScore = NULL;
 TTF_Font* fontEnemyHealth = NULL;
 TTF_Font* fontPlayerHealth = NULL;
+
+
 
 std::vector<Enemy*> MakeEnemyList()
 {
@@ -219,281 +223,315 @@ int main(int argv, char* argc[]) {
 
     bool gameStop = false;
     bool inMenu = true;
+    SDL_Texture* gameOverTexture = IMG_LoadTexture(gRenderer, "res/Game_over.png");
+	SDL_Texture* background = IMG_LoadTexture(gRenderer, "res/Background_scene.png");
+
+    bool gameOver = false;
+    
+
+    int mouseX = 0, mouseY = 0;
+    
 
     // Main game loop
     while (!gameStop) {
+		
         Uint32 currentTime = SDL_GetTicks();
-        float deltaTime = (currentTime - lastTime) / 1000.0f;
-
-        lastTime = currentTime;
-        if (currentTime - lastSpawnTime >= 10000) {
-            Enemy* p_enemy = new Enemy();
-            if (p_enemy != NULL)
-            {
-                p_enemy->LoadImg("res/Pokemon/Fire + stone dragon/sprite9_idle.png", gRenderer);
-                p_enemy->set_clips();
-                p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
-                p_enemy->set_y_pos(-100);
-
-
-                enemy_lists.push_back(p_enemy);
-
-            }
-            lastSpawnTime = currentTime;
-        }
-
-        if (currentTime - lastChestSpawnTime >= 5000) {
-            Chest* p_chest = new Chest();
-            if (p_chest != NULL)
-            {
-                p_chest->LoadImg("res/Chest-open.png", gRenderer);
-                p_chest->set_clips();
-                p_chest->set_x_pos((rand() % 2) ? 220 : 380);
-                p_chest->set_y_pos(-32);
-
-
-                chest_lists.push_back(p_chest);
-
-            }
-            lastChestSpawnTime = currentTime;
-        }
-
+        
+        
+		
         // Xử lý sự kiện
         while (SDL_PollEvent(&gEvent) != 0) {
             if (gEvent.type == SDL_QUIT) gameStop = true;
+            else if (gEvent.type == SDL_MOUSEMOTION) {
+                mouseX = gEvent.motion.x;
+                mouseY = gEvent.motion.y;
+            }
             else if (gEvent.type == SDL_MOUSEBUTTONDOWN && inMenu) {
-                int x = gEvent.button.x;
-                int y = gEvent.button.y;
-
-                if (isInside(menu.playButton, x, y)) {
-                    std::cout << "Play selected\n";
-                    inMenu = false; // chuyển sang gameplay
-                    
-                }
-                else if (isInside(menu.optionsButton, x, y)) {
-                    std::cout << "Options selected\n";
-                }
-                else if (isInside(menu.creditsButton, x, y)) {
-                    std::cout << "Credits selected\n";
-                }
-                else if (isInside(menu.quitButton, x, y)) {
-                   gameStop = true;
+                if (isInside(menu.playButton, mouseX, mouseY)) {
+                    std::cout << "Play clicked!\n";
+                    inMenu = false;
+					
                 }
             }
-            
+
             p_player.HandleInputAction(gEvent, gRenderer);
         }
 
-       
+
         // Cập nhật game state
-        map.Update(deltaTime, scroll_speed);
-        /*spawnManager.Update(deltaTime, scroll_speed);*/
-        p_player.Update(deltaTime);
+       
 
         /*enemy.SpawnEnemy(enemy, lastFrameTime);*/
         // Render (QUAN TRỌNG: thứ tự đúng)
         SDL_RenderClear(gRenderer);
 
         if (inMenu) {
-            menu.RenderMenu();
+            menu.RenderMenu(mouseX, mouseY);
+            
+            std::cout << currentTime << std::endl;
         }
+        
         else {
-
-            // 1. Background đầu tiên
-            gBackground.Render(gRenderer, NULL);
-
-            // 2. Map
-            map.Render(gRenderer);
-            /* std::cout << "Enemy count" << enemy_lists.size() << std::endl;*/
-            for (int i = 0; i < enemy_lists.size();i++)
+            if (timing) {
+				startTime = SDL_GetTicks();
+				timing = false;
+            }
+			std::cout << "Start time: " << startTime << std::endl;
+            
+            if (!gameOver)
             {
+                float deltaTime = (currentTime - lastTime) / 1000.0f;
+                
+				std::cout << currentTime << std::endl;
 
-                Enemy* p_enemy = enemy_lists.at(i);
-
-                if (p_enemy != NULL)
-                {
-                    p_enemy->Show(gRenderer);
-                    p_enemy->Update(scroll_speed, deltaTime);
-                    if (p_enemy->get_y_pos() > SCREEN_HEIGHT)
+                lastTime = currentTime;
+                if (SDL_GetTicks() - startTime - lastSpawnTime >= 10000) {
+                    Enemy* p_enemy = new Enemy();
+                    if (p_enemy != NULL)
                     {
-                        enemy_lists.erase(enemy_lists.begin() + i);
+                        p_enemy->LoadImg("res/Pokemon/Fire + stone dragon/sprite9_idle.png", gRenderer);
+                        p_enemy->set_clips();
+                        p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
+                        p_enemy->set_y_pos(-100);
+
+
+                        enemy_lists.push_back(p_enemy);
 
                     }
+                    lastSpawnTime = currentTime;
                 }
-            }
-            // Spawn chest
-            for (int i = 0; i < chest_lists.size();i++)
-            {
 
-                Chest* p_chest = chest_lists.at(i);
-
-                if (p_chest != NULL)
-                {
-                    p_chest->Chest_open_show(gRenderer, deltaTime);
-                    p_chest->Update(scroll_speed, deltaTime);
-                    if (p_chest->get_y_pos() > SCREEN_HEIGHT)
+                if (SDL_GetTicks() - startTime - lastChestSpawnTime >= 5000) {
+                    Chest* p_chest = new Chest();
+                    if (p_chest != NULL)
                     {
-                        chest_lists.erase(chest_lists.begin() + i);
+                        p_chest->LoadImg("res/Chest-open.png", gRenderer);
+                        p_chest->set_clips();
+                        p_chest->set_x_pos((rand() % 2) ? 220 : 380);
+                        p_chest->set_y_pos(-32);
+
+
+                        chest_lists.push_back(p_chest);
 
                     }
+                    lastChestSpawnTime = currentTime;
                 }
-            }
-            std::vector<bool> chestCollisionStates(chest_lists.size(), false);
-            // 4. Player và đạn
-            p_player.HandleBullet(gRenderer);
-            p_player.Show(gRenderer);
 
-            // Debug: in số lượng quái hiện có
-            /*std::cout << "Enemies count: " << spawnManager.GetEnemies().size() << std::endl;*/
+                map.Update(deltaTime, scroll_speed);
+                /*spawnManager.Update(deltaTime, scroll_speed);*/
+                p_player.Update(deltaTime);
+                // 1. Background đầu tiên
+                gBackground.Render(gRenderer, NULL);
 
-            std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
-            SDL_Rect pRect = p_player.GetRect();
-            SDL_Rect eRect;
-
-            // Bullet and enemy collide
-            for (int i = 0; i < enemy_lists.size(); i++)
-            {
-
-                Enemy* p_enemy = enemy_lists.at(i);
-                if (p_enemy)
+                // 2. Map
+                map.Render(gRenderer);
+                /* std::cout << "Enemy count" << enemy_lists.size() << std::endl;*/
+                for (int i = 0; i < enemy_lists.size();i++)
                 {
-                    eRect.x = p_enemy->GetRect().x;
-                    eRect.y = p_enemy->GetRect().y;
-                    eRect.w = p_enemy->get_width_frame();
-                    eRect.h = p_enemy->get_height_frame();
-                   
 
+                    Enemy* p_enemy = enemy_lists.at(i);
 
-
-                    for (int t = 0; t < bullet_lists.size(); t++)
+                    if (p_enemy != NULL)
                     {
-                        Bullet* p_bullet = bullet_lists.at(t);
-                        if (p_bullet && p_bullet->get_is_move())
+                        p_enemy->Show(gRenderer);
+                        p_enemy->Update(scroll_speed, deltaTime);
+                        if (p_enemy->get_y_pos() > SCREEN_HEIGHT)
                         {
-                            SDL_Rect bRect = p_bullet->GetRect();
+                            enemy_lists.erase(enemy_lists.begin() + i);
 
-                            bool bCol = SDLCommonFunc::CheckCollision(bRect, eRect);
-                            if (bCol)
+                        }
+                    }
+                }
+                // Spawn chest
+                for (int i = 0; i < chest_lists.size();i++)
+                {
+
+                    Chest* p_chest = chest_lists.at(i);
+
+                    if (p_chest != NULL)
+                    {
+                        p_chest->Chest_open_show(gRenderer, deltaTime);
+                        p_chest->Update(scroll_speed, deltaTime);
+                        if (p_chest->get_y_pos() > SCREEN_HEIGHT)
+                        {
+                            chest_lists.erase(chest_lists.begin() + i);
+
+                        }
+                    }
+                }
+                std::vector<bool> chestCollisionStates(chest_lists.size(), false);
+                // 4. Player và đạn
+                p_player.HandleBullet(gRenderer);
+                p_player.Show(gRenderer);
+
+                // Debug: in số lượng quái hiện có
+                /*std::cout << "Enemies count: " << spawnManager.GetEnemies().size() << std::endl;*/
+
+                std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
+                SDL_Rect pRect = p_player.GetRect();
+                SDL_Rect eRect;
+
+                // Bullet and enemy collide
+                for (int i = 0; i < enemy_lists.size(); i++)
+                {
+
+                    Enemy* p_enemy = enemy_lists.at(i);
+                    if (p_enemy)
+                    {
+                        eRect.x = p_enemy->GetRect().x;
+                        eRect.y = p_enemy->GetRect().y;
+                        eRect.w = p_enemy->get_width_frame();
+                        eRect.h = p_enemy->get_height_frame();
+
+
+
+
+                        for (int t = 0; t < bullet_lists.size(); t++)
+                        {
+                            Bullet* p_bullet = bullet_lists.at(t);
+                            if (p_bullet && p_bullet->get_is_move())
                             {
-                                float damage = p_bullet->get_damage_val();
-                                p_enemy->takeDamage(damage);
-                                p_bullet->set_is_move(false); // stop bullet
-                                std::cout << "Hit enemy! Damage: " << damage << std::endl;
+                                SDL_Rect bRect = p_bullet->GetRect();
 
-                                for (auto it = enemy_lists.begin(); it != enemy_lists.end();) {
-                                    Enemy* p_enemy = *it;
-                                    if (p_enemy->get_health() <= 0) {
-                                        it = enemy_lists.erase(it); // Xóa và cập nhật iterator
+                                bool bCol = SDLCommonFunc::CheckCollision(bRect, eRect);
+                                if (bCol)
+                                {
+                                    float damage = p_bullet->get_damage_val();
+                                    p_enemy->takeDamage(damage);
+                                    p_bullet->set_is_move(false); // stop bullet
+                                    std::cout << "Hit enemy! Damage: " << damage << std::endl;
+
+                                    for (auto it = enemy_lists.begin(); it != enemy_lists.end();) {
+                                        Enemy* p_enemy = *it;
+                                        if (p_enemy->get_health() <= 0) {
+                                            it = enemy_lists.erase(it); // Xóa và cập nhật iterator
+                                        }
+                                        else {
+                                            ++it;
+                                        }
                                     }
-                                    else {
-                                        ++it;
-                                    }
+
+                                    break; // only hit one enemy per bullet
                                 }
-
-                                break; // only hit one enemy per bullet
                             }
                         }
-                    }
-                    // Player and enemies collide
-                    bool pCol = SDLCommonFunc::CheckCollision(pRect, eRect);
-                    if (pCol && !isColliding && (currentTime - lastDamageTime >= damageCooldown))
-                    {
-                        isColliding = true;
-                        float damage = p_enemy->get_health();
-                        p_player.takeDamage(damage);
-                        enemy_lists.erase(enemy_lists.begin() + i);
-                        lastDamageTime = currentTime;
-                        std::cout << "Player health: " << p_player.get_health_val() << std::endl;
-                        if (p_player.get_health_val() <= 0)
+                        // Player and enemies collide
+                        bool pCol = SDLCommonFunc::CheckCollision(pRect, eRect);
+                        if (pCol && !isColliding && (currentTime - lastDamageTime >= damageCooldown))
                         {
-                            std::cout << "GAME OVER" << std::endl;
-                        }
-                    }
-                    else if (!pCol && isColliding)
-                    {
-                        isColliding = false;
-                    }
-
-                }
-            }
-
-            // Player and Chest collide
-            for (int r = 0; r < chest_lists.size(); r++)
-            {
-                Chest* p_chest = chest_lists.at(r);
-                if (p_chest)
-                {
-
-                    SDL_Rect cRect;
-                    cRect.x = p_chest->get_x_pos();
-                    cRect.y = p_chest->get_y_pos();
-                    cRect.w = p_chest->get_height_frame();
-                    cRect.h = p_chest->get_width_frame();
-                   
-                    bool pCol2 = SDLCommonFunc::CheckCollision(pRect, cRect);
-                    //std::cout << "Player and Chest collide" << std::endl;
-                    bool cCol = SDLCommonFunc::CheckCollision(cRect, eRect);
-                    if (cCol)
-                    {
-                        chest_lists.erase(chest_lists.begin() + r);
-                        r--;
-                    }
-                    else {
-                        if (pCol2 && !chestCollisionStates[r] && (currentTime - lastDamageTime >= damageCooldown))
-                        {
-                            chestCollisionStates[r] = true;
-                            std::cout << "Chest " << r << " and Player collide" << std::endl;
+                            isColliding = true;
+                            float damage = p_enemy->get_health();
+                            p_player.takeDamage(damage);
+                            enemy_lists.erase(enemy_lists.begin() + i);
                             lastDamageTime = currentTime;
-                            if (!p_chest->get_is_open()) {
-
-                                std::cout << "Is Open" << std::endl;
-                                p_chest->Open();
-
-
-
+                            std::cout << "Player health: " << p_player.get_health_val() << std::endl;
+                            if (p_player.get_health_val() <= 0 && !gameOver)
+                            {
+                                std::cout << "GAME OVER" << std::endl;
+                                gameOver = true;
 
                             }
                         }
-                        else if (!pCol2 && chestCollisionStates[r])
+                        else if (!pCol && isColliding)
                         {
-                            chestCollisionStates[r] = false;
+                            isColliding = false;
                         }
+
                     }
-
-
                 }
-            }
 
-            //Show score
-            std::string str_score = "Score: ";
-            Uint32 score_val = SDL_GetTicks() / 1000;
-
-            std::string str_val = std::to_string(score_val);
-            str_score += str_val;
-
-            score_game.setText(str_score);
-            score_game.loadFromRenderText(fontScore, gRenderer);
-            score_game.RenderText(gRenderer, SCREEN_WIDTH / 2 - 90, 10);
-
-            // Show player health
-            std::string str_player_health = std::to_string(p_player.get_health_val() - 1);
-            player_health.setText(str_player_health);
-            player_health.loadFromRenderText(fontPlayerHealth, gRenderer);
-            player_health.RenderText(gRenderer, p_player.GetRect().x + 13, p_player.GetRect().y - 32);
-            // Show enemy health
-            for (int i = 0; i < enemy_lists.size(); i++)
-            {
-
-                Enemy* p_enemy = enemy_lists.at(i);
-                if (p_enemy)
+                // Player and Chest collide
+                for (int r = 0; r < chest_lists.size(); r++)
                 {
-                    std::string str_enemy_health = std::to_string(p_enemy->get_health());
-                    enemy_health.setText(str_enemy_health);
-                    enemy_health.loadFromRenderText(fontEnemyHealth, gRenderer);
-                    enemy_health.RenderText(gRenderer, p_enemy->GetRect().x + 40, p_enemy->GetRect().y + 140);
+                    Chest* p_chest = chest_lists.at(r);
+                    if (p_chest)
+                    {
+
+                        SDL_Rect cRect;
+                        cRect.x = p_chest->get_x_pos();
+                        cRect.y = p_chest->get_y_pos();
+                        cRect.w = p_chest->get_height_frame();
+                        cRect.h = p_chest->get_width_frame();
+
+                        bool pCol2 = SDLCommonFunc::CheckCollision(pRect, cRect);
+                        //std::cout << "Player and Chest collide" << std::endl;
+                        bool cCol = SDLCommonFunc::CheckCollision(cRect, eRect);
+                        if (cCol)
+                        {
+                            chest_lists.erase(chest_lists.begin() + r);
+                            r--;
+                        }
+                        else {
+                            if (pCol2 && !chestCollisionStates[r] && (currentTime - lastDamageTime >= damageCooldown))
+                            {
+                                chestCollisionStates[r] = true;
+                                std::cout << "Chest " << r << " and Player collide" << std::endl;
+                                lastDamageTime = currentTime;
+                                if (!p_chest->get_is_open()) {
+
+                                    std::cout << "Is Open" << std::endl;
+                                    p_chest->Open();
+
+
+
+
+                                }
+                            }
+                            else if (!pCol2 && chestCollisionStates[r])
+                            {
+                                chestCollisionStates[r] = false;
+                            }
+                        }
+
+
+                    }
+                }
+
+                //Show score
+                std::string str_score = "Score: ";
+                Uint32 score_val = (SDL_GetTicks() - startTime) / 1000;
+
+                std::string str_val = std::to_string(score_val);
+                str_score += str_val;
+
+                score_game.setText(str_score);
+                score_game.loadFromRenderText(fontScore, gRenderer);
+                score_game.RenderText(gRenderer, SCREEN_WIDTH / 2 - 90, 10);
+
+                // Show player health
+                std::string str_player_health = std::to_string(p_player.get_health_val() - 1);
+                player_health.setText(str_player_health);
+                player_health.loadFromRenderText(fontPlayerHealth, gRenderer);
+                player_health.RenderText(gRenderer, p_player.GetRect().x + 13, p_player.GetRect().y - 32);
+                // Show enemy health
+                for (int i = 0; i < enemy_lists.size(); i++)
+                {
+
+                    Enemy* p_enemy = enemy_lists.at(i);
+                    if (p_enemy)
+                    {
+                        std::string str_enemy_health = std::to_string(p_enemy->get_health());
+                        enemy_health.setText(str_enemy_health);
+                        enemy_health.loadFromRenderText(fontEnemyHealth, gRenderer);
+                        enemy_health.RenderText(gRenderer, p_enemy->GetRect().x + 40, p_enemy->GetRect().y + 140);
+                    }
                 }
             }
-        }
+            else {
+                SDL_Rect dstRect, bgRect;
+                dstRect.w = 400; // chiều rộng ảnh Game Over
+                dstRect.h = 200; // chiều cao ảnh Game Over
+                dstRect.x = (SCREEN_WIDTH - dstRect.w) / 2;
+                dstRect.y = (SCREEN_HEIGHT - dstRect.h) / 2 - 200;
+
+				bgRect.w = SCREEN_WIDTH;
+				bgRect.h = SCREEN_HEIGHT;
+				bgRect.x = 0;
+				bgRect.y = 0;
+				SDL_RenderCopy(gRenderer, background, NULL, &bgRect);
+                SDL_RenderCopy(gRenderer, gameOverTexture, nullptr, &dstRect);
+
+            }
             SDL_RenderPresent(gRenderer);
             // Hello
             // Giữ ổn định FPS
@@ -501,7 +539,8 @@ int main(int argv, char* argc[]) {
             if (frameTime < FRAME_DELAY_GAME) {
                 SDL_Delay(FRAME_DELAY_GAME - frameTime);
             }
-        
+
+        }
     }
     close();
     return 0;
