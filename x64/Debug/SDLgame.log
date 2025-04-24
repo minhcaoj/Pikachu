@@ -1,21 +1,31 @@
 ﻿  main.cpp
-C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.h(34,16): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
+C:\Users\Acer\source\repos\SDLgame\SDLgame\CommonFunc.h(36,16): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
   (compiling source file 'main.cpp')
   
-C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.h(20,45): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.h(17,52): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
   (compiling source file 'main.cpp')
   
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(69,40): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(96,40): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(287,28): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(294,52): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(301,37): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(310,52): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(317,42): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(353,61): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(400,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(423,42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(451,53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(452,53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(199,15): warning C4101: 'collision': unreferenced local variable
+C:\Users\Acer\source\repos\SDLgame\SDLgame\Player.h(23,45): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'main.cpp')
+  
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(75,40): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(102,40): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(311,28): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(327,56): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(335,41): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(345,56): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(353,41): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(366,49): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(377,49): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(384,23): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(398,52): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(405,42): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(443,61): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(490,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(513,42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(537,61): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(538,61): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(563,53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(564,53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Acer\source\repos\SDLgame\SDLgame\main.cpp(207,15): warning C4101: 'collision': unreferenced local variable
   SDLgame.vcxproj -> C:\Users\Acer\source\repos\SDLgame\x64\Debug\SDLgame.exe

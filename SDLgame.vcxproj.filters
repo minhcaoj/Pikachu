@@ -54,6 +54,9 @@
     <ClCompile Include="MenuUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BuffText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Player-sheet.png">
@@ -98,6 +101,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MenuUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuffText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,8 +1,15 @@
 #pragma once
 #include "CommonFunc.h"
 #include "BaseObject.h"
+#include "Player.h"
 
 #define CHEST_FRAME_NUM 3
+
+enum ChestType {
+	CHEST_FIRE_RATE = 0,
+	CHEST_MOVE_SPEED = 1,
+	CHEST_BULLET_LEVEL = 2
+};
 
 class Chest:public BaseObject
 {
@@ -27,6 +34,11 @@ public:
 	void Chest_open_show(SDL_Renderer* render, Uint32 deltaTime);
 	void Open();
 
+	void SetType(ChestType type) { chest_type = type; }
+	ChestType GetType() const { return chest_type; }
+
+	void ApplyEffectToPlayer(Player& player);
+
 private:
 
 	float x_pos;
@@ -38,8 +50,9 @@ private:
 	Uint32 lastFrameTime;
 	int frameDelay;
 	bool is_open;
-	
+	ChestType chest_type;
 	int scale;
 	float frameTime;
 	int currentFrame;
+	
 };

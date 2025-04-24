@@ -9,6 +9,7 @@
 #include "Chest.h"
 #include "TextObject.h"
 #include "MenuUI.h"
+#include "BuffText.h"
 
 // Global variables
 
@@ -49,6 +50,11 @@ Enemy enemy;
 TTF_Font* fontScore = NULL;
 TTF_Font* fontEnemyHealth = NULL;
 TTF_Font* fontPlayerHealth = NULL;
+TTF_Font* chestTesxt = NULL;
+
+std::vector<BuffText> buffTextList;
+ // Khởi tạo seed cho rand()
+
 
 
 
@@ -95,7 +101,8 @@ std::vector<Chest*> MakeChestList()
             p_chest->set_clips();
             p_chest->set_x_pos((rand() % 2) ? 250 : 350);
             p_chest->set_y_pos(-50);
-
+            /*p_chest->RandomizeType();*/
+			p_chest->SetType(static_cast<ChestType>(rand() % 3));
 
             list_chest.push_back(p_chest);
         }
@@ -148,6 +155,7 @@ bool Init()
         fontScore = TTF_OpenFont("font/dlxfont_.ttf", 20);
         fontEnemyHealth = TTF_OpenFont("font/dlxfont_.ttf", 20);
         fontPlayerHealth = TTF_OpenFont("font/dlxfont_.ttf", 20);
+		chestTesxt = TTF_OpenFont("font/dlxfont_.ttf", 20);
         if (fontScore == NULL)
         {
             std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
@@ -204,7 +212,7 @@ int main(int argv, char* argc[]) {
 
     std::vector<Enemy*> enemy_lists = MakeEnemyList();
     std::vector<Chest*> chest_lists = MakeChestList();
-
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     InfiniteScrollingMap map(gRenderer, "res/Grass-map-1.png", "res/Grass-map-2.png");
 
@@ -252,7 +260,20 @@ int main(int argv, char* argc[]) {
                     inMenu = false;
 					
                 }
+				if (isInside(menu.quitButton, mouseX, mouseY)) {
+					std::cout << "Quit clicked!\n";
+					gameStop = true;
+				}
+                if (isInside(menu.creditsButton, mouseX, mouseY)) {
+                    std::cout << "Credits clicked!\n";
+                    // Show credits screen or perform any action you want
+                }
+				if (isInside(menu.optionButton, mouseX, mouseY)) {
+					std::cout << "Options clicked!\n";
+					// Show options screen or perform any action you want
+				}
             }
+            
 
             p_player.HandleInputAction(gEvent, gRenderer);
         }
@@ -268,7 +289,7 @@ int main(int argv, char* argc[]) {
         if (inMenu) {
             menu.RenderMenu(mouseX, mouseY);
             
-            std::cout << currentTime << std::endl;
+         
         }
         
         else {
@@ -276,39 +297,106 @@ int main(int argv, char* argc[]) {
 				startTime = SDL_GetTicks();
 				timing = false;
             }
-			std::cout << "Start time: " << startTime << std::endl;
+			
             
             if (!gameOver)
             {
                 float deltaTime = (currentTime - lastTime) / 1000.0f;
                 
-				std::cout << currentTime << std::endl;
+                
+				
+               
+				
 
                 lastTime = currentTime;
                 if (SDL_GetTicks() - startTime - lastSpawnTime >= 10000) {
+					int caseEnemy = rand() % 3;
                     Enemy* p_enemy = new Enemy();
-                    if (p_enemy != NULL)
-                    {
-                        p_enemy->LoadImg("res/Pokemon/Fire + stone dragon/sprite9_idle.png", gRenderer);
-                        p_enemy->set_clips();
-                        p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
-                        p_enemy->set_y_pos(-100);
+					Enemy* p_enemy1 = new Enemy();
+					Enemy* p_enemy2 = new Enemy();
+                    switch (caseEnemy) {
+					case 0:
+						// Spawn Dragon
+						
+                        if (p_enemy != NULL)
+                        {
+                            p_enemy->LoadImg("res/Pokemon/Fire + stone dragon/sprite9_idle.png", gRenderer);
+                            p_enemy->set_health_val(15 + ((SDL_GetTicks() - startTime) / 1000));
+                            p_enemy->set_clips();
+
+                            p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
+
+                            p_enemy->set_y_pos(-150);
 
 
-                        enemy_lists.push_back(p_enemy);
+                            enemy_lists.push_back(p_enemy);
 
+                        }
+                        lastSpawnTime = currentTime;
+						break;
+					case 1:
+                        
+                        if (p_enemy != NULL)
+                        {
+                            p_enemy->LoadImg("res/Pokemon/Leaf - lion/sprite3_idle.png", gRenderer);
+                            p_enemy->set_health_val(15 + ((SDL_GetTicks() - startTime) / 1000));
+                            p_enemy->set_clips();
+
+                            p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
+
+                            p_enemy->set_y_pos(-150);
+
+
+                            enemy_lists.push_back(p_enemy);
+
+                        }
+                        lastSpawnTime = currentTime;
+						// Spawn Lion   
+
+						break;
+					case 2:
+						// Spawn Dragon and Lion
+						
+                        if (p_enemy1 != NULL && p_enemy2 != NULL)
+                        {
+                            p_enemy1->LoadImg("res/Pokemon/Fire + stone dragon/sprite9_idle.png", gRenderer);
+                            p_enemy1->set_health_val(15 + ((SDL_GetTicks() - startTime) / 1000));
+                            p_enemy1->set_clips();
+                            int dragonX = rand() % 2 ? 220 : 350;
+                            p_enemy1->set_x_pos(dragonX);
+                            p_enemy1->set_y_pos(-150);
+                            
+							enemy_lists.push_back(p_enemy1);
+
+                            p_enemy2->LoadImg("res/Pokemon/Leaf - lion/sprite3_idle.png", gRenderer);
+                            p_enemy2->set_health_val(15 + ((SDL_GetTicks() - startTime) / 1000));
+                            p_enemy2->set_clips();
+							int lionX = (dragonX == 220) ? 350 : 220; // Ensure lion spawns at a different x position
+                            
+
+                            p_enemy2->set_x_pos(lionX);
+
+                            p_enemy2->set_y_pos(-150);
+
+
+                            enemy_lists.push_back(p_enemy2);
+                        }
+						lastSpawnTime = currentTime;
+						break;
                     }
-                    lastSpawnTime = currentTime;
-                }
 
-                if (SDL_GetTicks() - startTime - lastChestSpawnTime >= 5000) {
+                    
+                }
+				
+
+                if (SDL_GetTicks() - startTime - lastChestSpawnTime >= 3000) {
                     Chest* p_chest = new Chest();
                     if (p_chest != NULL)
                     {
                         p_chest->LoadImg("res/Chest-open.png", gRenderer);
                         p_chest->set_clips();
                         p_chest->set_x_pos((rand() % 2) ? 220 : 380);
-                        p_chest->set_y_pos(-32);
+                        p_chest->set_y_pos(-100);
 
 
                         chest_lists.push_back(p_chest);
@@ -335,6 +423,8 @@ int main(int argv, char* argc[]) {
                     {
                         p_enemy->Show(gRenderer);
                         p_enemy->Update(scroll_speed, deltaTime);
+						
+						
                         if (p_enemy->get_y_pos() > SCREEN_HEIGHT)
                         {
                             enemy_lists.erase(enemy_lists.begin() + i);
@@ -370,7 +460,7 @@ int main(int argv, char* argc[]) {
                 std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
                 SDL_Rect pRect = p_player.GetRect();
                 SDL_Rect eRect;
-
+				std::cout << enemy_lists.size() << std::endl;
                 // Bullet and enemy collide
                 for (int i = 0; i < enemy_lists.size(); i++)
                 {
@@ -437,6 +527,28 @@ int main(int argv, char* argc[]) {
                             isColliding = false;
                         }
 
+                        for (int r = 0; r < chest_lists.size(); r++)
+                        {
+                            Chest* p_chest = chest_lists.at(r);
+                            if (p_chest)
+                            {
+
+                                SDL_Rect cRect;
+                                cRect.x = p_chest->get_x_pos();
+                                cRect.y = p_chest->get_y_pos();
+                                cRect.w = p_chest->get_height_frame();
+                                cRect.h = p_chest->get_width_frame();
+
+                                bool pCol2 = SDLCommonFunc::CheckCollision(pRect, cRect);
+                                //std::cout << "Player and Chest collide" << std::endl;
+                                bool cCol = SDLCommonFunc::CheckCollision(cRect, eRect);
+                                if (cCol)
+                                {
+                                    chest_lists.erase(chest_lists.begin() + r);
+                                    r--;
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -455,13 +567,8 @@ int main(int argv, char* argc[]) {
 
                         bool pCol2 = SDLCommonFunc::CheckCollision(pRect, cRect);
                         //std::cout << "Player and Chest collide" << std::endl;
-                        bool cCol = SDLCommonFunc::CheckCollision(cRect, eRect);
-                        if (cCol)
-                        {
-                            chest_lists.erase(chest_lists.begin() + r);
-                            r--;
-                        }
-                        else {
+                        
+                      
                             if (pCol2 && !chestCollisionStates[r] && (currentTime - lastDamageTime >= damageCooldown))
                             {
                                 chestCollisionStates[r] = true;
@@ -471,7 +578,18 @@ int main(int argv, char* argc[]) {
 
                                     std::cout << "Is Open" << std::endl;
                                     p_chest->Open();
+                                    p_chest->ApplyEffectToPlayer(p_player);
 
+                                    SDL_Color color = { 255, 255, 0, 255 };
+                                    std::string effectText = "";
+
+                                    switch (p_chest->GetType()) {
+                                    case CHEST_FIRE_RATE: effectText = "+ Fire Rate!"; break;
+                                    case CHEST_MOVE_SPEED: effectText = "+ Speed!"; break;
+                                    case CHEST_BULLET_LEVEL: effectText = "+ Bullet Upgrade!"; break;
+                                    }
+
+                                    buffTextList.emplace_back(effectText, p_player.GetRectFrame().x, p_player.GetRectFrame().y, color, chestTesxt);
 
 
 
@@ -481,11 +599,19 @@ int main(int argv, char* argc[]) {
                             {
                                 chestCollisionStates[r] = false;
                             }
-                        }
+                        
 
 
                     }
                 }
+
+                for (int i = 0; i < buffTextList.size(); ++i) {
+                    buffTextList[i].update(deltaTime);
+                    buffTextList[i].render(gRenderer);
+                }
+
+                buffTextList.erase(std::remove_if(buffTextList.begin(), buffTextList.end(),
+                    [](const BuffText& text) { return text.isExpired(); }), buffTextList.end());
 
                 //Show score
                 std::string str_score = "Score: ";
@@ -516,6 +642,9 @@ int main(int argv, char* argc[]) {
                         enemy_health.RenderText(gRenderer, p_enemy->GetRect().x + 40, p_enemy->GetRect().y + 140);
                     }
                 }
+
+              
+
             }
             else {
                 SDL_Rect dstRect, bgRect;

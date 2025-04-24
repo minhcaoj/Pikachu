@@ -106,3 +106,28 @@ void Chest::Show(SDL_Renderer* render)
 	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame*scale, height_frame*scale };
 	SDL_RenderCopy(render, p_object, NULL, &renderQuad);
 }
+
+void Chest::ApplyEffectToPlayer(Player& player)
+{
+	if (!is_open) return;
+	Bullet* p_bullet = new Bullet();
+	int bulletSpeed = p_bullet->get_y_val();
+	float playerSpeed = player.get_speed_val();
+	switch (chest_type) {
+	case CHEST_FIRE_RATE:
+		
+		bulletSpeed++;
+		p_bullet->set_y_val(bulletSpeed); // Tăng tốc độ bắn
+		break;
+	case CHEST_MOVE_SPEED:
+		
+		playerSpeed++;
+		player.set_speed_val(playerSpeed); // Tăng tốc độ di chuyển
+		break;
+	case CHEST_BULLET_LEVEL:
+		
+		break;
+	}
+}
+
+

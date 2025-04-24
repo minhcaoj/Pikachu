@@ -12,6 +12,9 @@ public:
 	~Player();
 	int get_health_val() const { return PlayerHealth; }
 	void set_health_val(const int& player_health) { PlayerHealth = player_health; }
+
+	float get_speed_val() const { return speed; }	
+	void set_speed_val(const int& speedVal) { speed = speedVal; }
 	
 	bool LoadImg(std::string path, SDL_Renderer* render);
 	void Show(SDL_Renderer* render);

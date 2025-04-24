@@ -31,6 +31,7 @@ public:
 
 	void Update(float scroll_speed, float deltaTime);
 	void takeDamage(int damage);
+	void increaseHealth(float deltaTIme);
 
 
 private:

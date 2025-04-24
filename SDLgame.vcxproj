@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="BuffText.cpp" />
     <ClCompile Include="Chest.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CommonFunc.cpp" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="BuffText.h" />
     <ClInclude Include="Chest.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CommonFunc.h" />
