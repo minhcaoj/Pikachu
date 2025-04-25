@@ -31,7 +31,7 @@ Các thư viện đi kèm: **SDL2**, **SDL2-image**, **SDL2-ttf** và **SDL2-mix
 # 1. Preview
 Demo Game: https://youtu.be/tIsmC2twFCQ
 
-![image](image/preview.png)
+![res](res/image/preview.png)
 # 2. Building And Running
   - Chạy file **main.exe** để chơi hoặc
   - Sử dụng [MinGW-w64](https://www.mingw-w64.org/) và các thư viện [SDL2](https://www.libsdl.org/) đi kèm để build file **main.cpp**. Chạy file vừa build được để chơi.
@@ -49,12 +49,12 @@ Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải 
 | Bullet Damage                                     | Cộng thêm 1 damage cho đạn                                     |
 | Player Speed buff                                 | Tăng tốc độ di chuyển cho người chơi                           |
 
-## C. Characters
+## B. Characters
 | Nhân vật                                                                                    | Tên                 | Số máu                                 |
 |---------------------------------------------------------------------------------------------|---------------------|----------------------------------------|
-| <img src = "res/Pokemon/Fire + stone dragon/sprite9_idle.png" width = 32>                   | **Main Character**  | 10 + **Số máu ăn thêm**                |
+| <img src = "res/player-sheet.png" width = 32>                                               | **Main Character**  | 10 + **Số máu ăn thêm**                |
 | <img src = "res/Pokemon/Fire + stone dragon/sprite9_idle.png" width = 96>                   | **Stone Dragon**    | 15 + **Theo thời gian**                |
-| <img src = "res/Pokemon/Fire + stone dragon/sprite9_idle.png" width = 96>                   | **Leaf lion**       | 20 + **Theo thời gian**                |
+| <img src = "res/Pokemon/Leaf - lion/sprite3_idle.png" width = 96>                           | **Leaf lion**       | 20 + **Theo thời gian**                |
 
 # 5. Controls (Included in the Tutorial of the Game)
   - Di chuyển: **A**, **D** (trái phải).
