@@ -9,11 +9,14 @@ public:
     ~MenuUI();
 
     void RenderMenu(int mouseX, int mouseY);
+	void RenderGameOver(int mouseX, int mouseY);
     SDL_Rect playButton;
 	SDL_Rect optionButton;
 	SDL_Rect quitButton;
 	SDL_Rect creditsButton;
-	
+	SDL_Rect replayButton;
+	SDL_Rect optionButtonOver;
+
 
 private:
     SDL_Renderer* renderer;
@@ -26,6 +29,8 @@ private:
 	SDL_Texture* quitHover;
 	SDL_Texture* creditsNormal;
 	SDL_Texture* creditsHover;
+	SDL_Texture* replayNormal;
+	SDL_Texture* replayHover;
 };
 
 #endif

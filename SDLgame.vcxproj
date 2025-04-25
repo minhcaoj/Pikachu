@@ -145,7 +145,6 @@
     <ClCompile Include="CommonFunc.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="InfiniteMap.cpp" />
-    <ClCompile Include="Itachi.cpp" />
     <ClCompile Include="main.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Acer\Desktop\Platformer-2D-SDL\SDL2_image-devel-2.8.5-VC\SDL2_image-2.8.5\include;C:\Users\Acer\Desktop\Platformer-2D-SDL\SDL2_mixer-devel-2.8.1-VC\SDL2_mixer-2.8.1\include;C:\Users\Acer\Desktop\Platformer-2D-SDL\SDL2_ttf-devel-2.24.0-VC\SDL2_ttf-2.24.0\include;C:\Users\Acer\Desktop\Platformer-2D-SDL\SDL2-devel-2.32.0-VC\SDL2-2.32.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -167,11 +166,13 @@
     <ClInclude Include="CommonFunc.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="InfiniteMap.h" />
-    <ClInclude Include="Itachi.h" />
     <ClInclude Include="MenuUI.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="TextObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

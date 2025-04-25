@@ -1,6 +1,5 @@
 ﻿
 #include "BaseObject.h"
-#include "Itachi.h"
 #include "Player.h"
 #include "Bullet.h"
 #include "Enemy.h"
@@ -24,6 +23,7 @@ int x = SCREEN_WIDTH / 2 - 30;  // Player position
 int y = 550;
 int frame = 0;
 float scaleFactor = 2.0f;
+int score;
 
 Uint32 lastFrameTime = 0;
 const int frameDelay = 200;   // Time (ms) per frame
@@ -42,7 +42,7 @@ Uint32 startTime = 0;
 
 BaseObject gBackground;
 SDL_Texture* PlayerStanding;
-Itachi loadItachi;
+
 
 Bullet Pokeball;
 Enemy enemy;
@@ -50,7 +50,8 @@ Enemy enemy;
 TTF_Font* fontScore = NULL;
 TTF_Font* fontEnemyHealth = NULL;
 TTF_Font* fontPlayerHealth = NULL;
-TTF_Font* chestTesxt = NULL;
+TTF_Font* chestText = NULL;
+TTF_Font* fontScoreOver = NULL;
 
 std::vector<BuffText> buffTextList;
  // Khởi tạo seed cho rand()
@@ -155,7 +156,8 @@ bool Init()
         fontScore = TTF_OpenFont("font/dlxfont_.ttf", 20);
         fontEnemyHealth = TTF_OpenFont("font/dlxfont_.ttf", 20);
         fontPlayerHealth = TTF_OpenFont("font/dlxfont_.ttf", 20);
-		chestTesxt = TTF_OpenFont("font/dlxfont_.ttf", 20);
+		fontScoreOver = TTF_OpenFont("font/dlxfont_.ttf", 30);
+		chestText = TTF_OpenFont("font/dlxfont_.ttf", 20);
         if (fontScore == NULL)
         {
             std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
@@ -217,6 +219,7 @@ int main(int argv, char* argc[]) {
     InfiniteScrollingMap map(gRenderer, "res/Grass-map-1.png", "res/Grass-map-2.png");
 
     MenuUI menu(gRenderer);
+    MenuUI gameOverRender(gRenderer);
 
 
     // Text
@@ -258,22 +261,44 @@ int main(int argv, char* argc[]) {
                 if (isInside(menu.playButton, mouseX, mouseY)) {
                     std::cout << "Play clicked!\n";
                     inMenu = false;
-					
+
                 }
-				if (isInside(menu.quitButton, mouseX, mouseY)) {
-					std::cout << "Quit clicked!\n";
-					gameStop = true;
-				}
+                if (isInside(menu.quitButton, mouseX, mouseY)) {
+                    std::cout << "Quit clicked!\n";
+                    gameStop = true;
+                }
                 if (isInside(menu.creditsButton, mouseX, mouseY)) {
                     std::cout << "Credits clicked!\n";
                     // Show credits screen or perform any action you want
                 }
-				if (isInside(menu.optionButton, mouseX, mouseY)) {
-					std::cout << "Options clicked!\n";
-					// Show options screen or perform any action you want
-				}
+                if (isInside(menu.optionButton, mouseX, mouseY)) {
+                    std::cout << "Options clicked!\n";
+                    // Show options screen or perform any action you want
+                }
             }
-            
+            else if (gEvent.type == SDL_MOUSEBUTTONDOWN && gameOver) {
+              
+                if (isInside(gameOverRender.replayButton, mouseX, mouseY)) {
+                    std::cout << "Restart clicked!\n";
+                    // Reset game state
+                    gameOver = false;
+                    inMenu = false;
+                    timing = true;
+                    score = 0;
+                    enemy_lists.clear();
+                    chest_lists.clear();
+                    p_player.Reset(); // Hàm reset trạng thái của Player
+                }
+				if (isInside(gameOverRender.quitButton, mouseX, mouseY)) {
+					std::cout << "Quit clicked!\n";
+					gameStop = true;
+				}
+                if (isInside(menu.optionButton, mouseX, mouseY)) {
+                    std::cout << "Options clicked!\n";
+                    // Show options screen or perform any action you want
+                }
+            }
+        
 
             p_player.HandleInputAction(gEvent, gRenderer);
         }
@@ -578,19 +603,36 @@ int main(int argv, char* argc[]) {
 
                                     std::cout << "Is Open" << std::endl;
                                     p_chest->Open();
-                                    p_chest->ApplyEffectToPlayer(p_player);
+                                    
+                                        p_chest->ApplyEffectToPlayer(p_player);
+                                        SDL_Color color;
 
-                                    SDL_Color color = { 255, 255, 0, 255 };
-                                    std::string effectText = "";
 
-                                    switch (p_chest->GetType()) {
-                                    case CHEST_FIRE_RATE: effectText = "+ Fire Rate!"; break;
-                                    case CHEST_MOVE_SPEED: effectText = "+ Speed!"; break;
-                                    case CHEST_BULLET_LEVEL: effectText = "+ Bullet Upgrade!"; break;
-                                    }
+                                        std::string effectText = "";
 
-                                    buffTextList.emplace_back(effectText, p_player.GetRectFrame().x, p_player.GetRectFrame().y, color, chestTesxt);
+                                        switch (p_chest->GetType()) {
+                                        case CHEST_FIRE_RATE:
+                                            effectText = "+ Bullet Speed!";
+                                            color = { 0, 255, 255, 255 };
+                                            break;
+                                        case CHEST_MOVE_SPEED:
+                                            effectText = "+ Speed!";
+                                            color = { 0, 0, 0, 255 };
+                                            break;
+                                        case HEALTH_UPGRADE:
+                                            effectText = "+ 10 Hp";
+                                            color = { 0, 255, 0, 255 };
+                                            break;
+                                        case BULLET_DAMAGE:
+                                            effectText = "+1 Bullet Damage!";
+                                            color = { 255, 0, 0, 255 };
+                                            break;
+                                        }
 
+                                        buffTextList.emplace_back(effectText, p_player.GetRectFrame().x, p_player.GetRectFrame().y, color, chestText);
+
+                                    
+                                   
 
 
                                 }
@@ -616,6 +658,7 @@ int main(int argv, char* argc[]) {
                 //Show score
                 std::string str_score = "Score: ";
                 Uint32 score_val = (SDL_GetTicks() - startTime) / 1000;
+                score = score_val;
 
                 std::string str_val = std::to_string(score_val);
                 str_score += str_val;
@@ -647,6 +690,8 @@ int main(int argv, char* argc[]) {
 
             }
             else {
+				
+
                 SDL_Rect dstRect, bgRect;
                 dstRect.w = 400; // chiều rộng ảnh Game Over
                 dstRect.h = 200; // chiều cao ảnh Game Over
@@ -660,6 +705,14 @@ int main(int argv, char* argc[]) {
 				SDL_RenderCopy(gRenderer, background, NULL, &bgRect);
                 SDL_RenderCopy(gRenderer, gameOverTexture, nullptr, &dstRect);
 
+                std::string str_score = "Your score: ";
+				std::string str_val = std::to_string(score);
+                str_score += str_val;
+                score_game.setText(str_score);
+                score_game.loadFromRenderText(fontScoreOver, gRenderer);
+                score_game.RenderText(gRenderer, SCREEN_WIDTH / 2 - 190, 300);
+
+				gameOverRender.RenderGameOver(mouseX, mouseY);
             }
             SDL_RenderPresent(gRenderer);
             // Hello

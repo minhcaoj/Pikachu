@@ -8,7 +8,9 @@
 enum ChestType {
 	CHEST_FIRE_RATE = 0,
 	CHEST_MOVE_SPEED = 1,
-	CHEST_BULLET_LEVEL = 2
+	
+	HEALTH_UPGRADE = 2,
+	BULLET_DAMAGE = 3,
 };
 
 class Chest:public BaseObject

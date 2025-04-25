@@ -110,22 +110,35 @@ void Chest::Show(SDL_Renderer* render)
 void Chest::ApplyEffectToPlayer(Player& player)
 {
 	if (!is_open) return;
-	Bullet* p_bullet = new Bullet();
-	int bulletSpeed = p_bullet->get_y_val();
+	 // Lấy viên đạn cuối cùng trong danh sách
+	int bulletSpeed = player.get_bullet_speed();
 	float playerSpeed = player.get_speed_val();
-	switch (chest_type) {
-	case CHEST_FIRE_RATE:
-		
-		bulletSpeed++;
-		p_bullet->set_y_val(bulletSpeed); // Tăng tốc độ bắn
+	int playerHealth = player.get_health_val();
+	int bulletDamage = player.get_bullet_damage();
+	int check = rand() % 4;
+	switch (check) {
+	case 0:
+
+		bulletSpeed += 1;
+		player.set_bullet_speed(bulletSpeed); // Tăng tốc độ bắn
+		chest_type = CHEST_FIRE_RATE;
 		break;
-	case CHEST_MOVE_SPEED:
-		
-		playerSpeed++;
+	case 1:
+
+		playerSpeed += 20;
 		player.set_speed_val(playerSpeed); // Tăng tốc độ di chuyển
+		chest_type = CHEST_MOVE_SPEED;
 		break;
-	case CHEST_BULLET_LEVEL:
-		
+	case 2:
+		playerHealth += 10;
+		player.set_health_val(playerHealth); // Tăng máu	
+		chest_type = HEALTH_UPGRADE;
+		break;
+
+	case 3:
+		bulletDamage += 1;
+		player.set_bullet_damage(bulletDamage); // Tăng sát thương đạn
+		chest_type = BULLET_DAMAGE;
 		break;
 	}
 }

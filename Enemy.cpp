@@ -95,10 +95,3 @@ void Enemy::takeDamage(int damage)
 {
 	health -= damage;
 }
-
-void Enemy::increaseHealth(float deltaTime)
-{
-
-	health += 0.1f * deltaTime;
-	
-}

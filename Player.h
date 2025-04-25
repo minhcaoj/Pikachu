@@ -24,13 +24,18 @@ public:
 	void Update(float deltaTime);
 	void HandleBullet(SDL_Renderer* render);
 	void takeDamage(float damage);
-	
+	void Reset();
 	SDL_Rect GetRectFrame();
 	void set_bullet_lists(std::vector<Bullet*> bullet_list)
 	{
 		p_bullet_list = bullet_list;
 	}
 	std::vector<Bullet*> get_bullet_list() const { return p_bullet_list; }
+
+	int get_bullet_damage() const { return bulletDamage; }
+	void set_bullet_damage(int damage) { bulletDamage = damage; }
+	int get_bullet_speed() const { return bulletSpeed; }
+	void set_bullet_speed(int speed) { bulletSpeed = speed; }
 
 private:
 	std::vector<Bullet*> p_bullet_list;
@@ -53,6 +58,8 @@ private:
 	int scaleFactor;
 	int PlayerHealth;
 	float lastTime;
+	int bulletSpeed;
+	int bulletDamage;
 };
 
 #endif

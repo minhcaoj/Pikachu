@@ -17,11 +17,13 @@ Player::Player()
 	frameDelay = 200;
 	input_type.left = 0;
 	input_type.right = 0;
-	speed = 100.0f;
+	speed = 50.0f;
 	scaleFactor = 2;
 	bulletLevel = 1;
-	PlayerHealth = 13;
+	PlayerHealth = 11;
 	lastTime = SDL_GetTicks() / 1000.0f;
+	bulletSpeed = 2;
+	bulletDamage = 5;
 }
 
 Player::~Player()
@@ -155,8 +157,8 @@ void Player::HandleInputAction(SDL_Event events, SDL_Renderer* render) {
 				Uint32 currentTime = SDL_GetTicks();
 				float deltaTime = (currentTime - lastTime) / 1000.0f;
 				p_bullet->SetRect(this->rect_.x + 10, rect_.y + 10);
-				p_bullet->set_y_val(2);
-				p_bullet->set_damage_val(5);
+				p_bullet->set_y_val(bulletSpeed);
+				p_bullet->set_damage_val(bulletDamage);
 				p_bullet->set_is_move(true);
 
 				p_bullet_list.push_back(p_bullet);
@@ -205,4 +207,17 @@ SDL_Rect Player::GetRectFrame()
 void Player::takeDamage(float damage)
 {
 	PlayerHealth -= damage;
+}
+
+void Player::Reset() {
+	x_pos = SCREEN_WIDTH / 2 - 30;
+	y_pos = 550;
+	x_val = 0;
+	y_val = 0;
+	frame = 0;
+	PlayerHealth = 11;
+	bulletLevel = 1;
+	p_bullet_list.clear();
+	speed = 50.0f;
+
 }

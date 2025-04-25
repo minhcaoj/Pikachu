@@ -17,15 +17,16 @@ quitNormal(nullptr), quitHover(nullptr), creditsNormal(nullptr), creditsHover(nu
 	creditsHover = IMG_LoadTexture(renderer, "res/Menu_button/Credits_hover.png");
 
 
-    if (!backgroundTexture || !playNormal || !playHover) {
-        std::cerr << "Image loading error: " << IMG_GetError() << std::endl;
-    }
 
     // Tọa độ chính xác của nút Play trên menu
     playButton = { 190, 320, 300, 100 };
 	optionButton = { 190, 420, 300, 100 };
 	creditsButton = { 190, 520, 300, 100 };
 	quitButton = { 190, 620, 300, 100 };
+	replayButton = { 190, 420, 300, 100 };
+	optionButtonOver = { 190, 520, 300, 100 };
+	
+	
 	
 	// Tạo các nút khác nếu cần
 	// optionButton = { ... };
@@ -63,4 +64,20 @@ void MenuUI::RenderMenu(int mouseX, int mouseY) {
 	SDL_RenderCopy(renderer, quitTex, nullptr, &quitButton);
 	SDL_RenderCopy(renderer, creditsTex, nullptr, &creditsButton);
 	SDL_RenderPresent(renderer);
+}
+
+void MenuUI::RenderGameOver(int mouseX, int mouseY)
+{
+	SDL_Point mousePos = { mouseX, mouseY };
+	SDL_Texture* replayTex = SDL_PointInRect(&mousePos, &replayButton)
+		? playHover : playNormal;
+	
+	SDL_Texture* quitTex = SDL_PointInRect(&mousePos, &quitButton)
+		? quitHover : quitNormal;
+	SDL_Texture* OptionTex = SDL_PointInRect(&mousePos, &optionButtonOver)
+		? optionHover : optionNormal;
+
+	SDL_RenderCopy(renderer, replayTex, nullptr, &replayButton);
+	SDL_RenderCopy(renderer, OptionTex, nullptr, &optionButtonOver);
+	SDL_RenderCopy(renderer, quitTex, nullptr, &quitButton);
 }
