@@ -14,9 +14,8 @@
 - [2. Building And Running](#2-building-and-running)
 - [3. How to play](#3-how-to-play)
 - [4. Parameters](#4-parameters)
-  * [A. Guns](#a-guns)
-  * [B. Recovery Items](#b-recovery-items)
-  * [C. Characters](#c-characters)
+  * [A. Chest Buff](#a-chest-buff)
+  * [B. Characters](#c-characters)
 - [5. Controls](#5-controls-included-in-the-tutorial-of-the-game)
 - [6. Scoring method](#6-scoring-method)
 - [7. Sources](#7-sources)
@@ -33,7 +32,7 @@ Demo Game: https://youtu.be/tIsmC2twFCQ
 
 ![res](res/image/preview.png)
 # 2. Building And Running
-  - Chạy file **main.exe** để chơi hoặc
+  - Chạy file **main.exe** để chơi
   - Sử dụng [MinGW-w64](https://www.mingw-w64.org/) và các thư viện [SDL2](https://www.libsdl.org/) đi kèm để build file **main.cpp**. Chạy file vừa build được để chơi.
 # 3. How to play
 Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải các vật thể này sẽ bị trừ máu.
@@ -41,7 +40,7 @@ Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải 
 Ăn thêm các vật phẩm cần thiết để hỗ trợ cho màn chơi.
 
 # 4. Parameters
-## A. Chest buff
+## A. Chest Buff
 | Vật phẩm                                          | Tác dụng                                                       |
 |---------------------------------------------------|----------------------------------------------------------------|
 | Health upgrade                                    | Cộng thêm 10 máu cho người chơi                                |
@@ -52,7 +51,7 @@ Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải 
 ## B. Characters
 | Nhân vật                                                                                    | Tên                 | Số máu                                 |
 |---------------------------------------------------------------------------------------------|---------------------|----------------------------------------|
-| <img src = "res/player-sheet.png" width = 32>                                               | **Main Character**  | 10 + **Số máu ăn thêm**                |
+| <img src = "res/player-sheet.png" width = 96>                                               | **Main Character**  | 10 + **Số máu ăn thêm**                |
 | <img src = "res/Pokemon/Fire + stone dragon/sprite9_idle.png" width = 96>                   | **Stone Dragon**    | 15 + **Theo thời gian**                |
 | <img src = "res/Pokemon/Leaf - lion/sprite3_idle.png" width = 96>                           | **Leaf lion**       | 20 + **Theo thời gian**                |
 
