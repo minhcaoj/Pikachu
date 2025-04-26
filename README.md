@@ -51,7 +51,7 @@ Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải 
 ## B. Characters
 | Nhân vật                                                                                    | Tên                 | Số máu                                 |
 |---------------------------------------------------------------------------------------------|---------------------|----------------------------------------|
-| <img src = "res/image/player.png" width = 96>                                               | **Main Character**  | 10 + **Số máu ăn thêm**                |
+| <img src = "res/image/Player.png" width = 96>                                               | **Main Character**  | 10 + **Số máu ăn thêm**                |
 | <img src = "res/image/Fire dragon.png" width = 96>                                          | **Stone Dragon**    | 15 + **Theo thời gian**                |
 | <img src = "res/image/Leaf lion.png" width = 96>                                            | **Leaf lion**       | 20 + **Theo thời gian**                |
 
