@@ -23,7 +23,7 @@ Player::Player()
 	PlayerHealth = 11;
 	lastTime = SDL_GetTicks() / 1000.0f;
 	bulletSpeed = 2;
-	bulletDamage = 5;
+	bulletDamage = 3;
 }
 
 Player::~Player()
@@ -219,5 +219,7 @@ void Player::Reset() {
 	bulletLevel = 1;
 	p_bullet_list.clear();
 	speed = 50.0f;
+	bulletDamage = 3;
+	bulletSpeed = 2;
 
 }

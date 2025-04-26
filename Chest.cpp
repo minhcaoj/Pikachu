@@ -136,7 +136,7 @@ void Chest::ApplyEffectToPlayer(Player& player)
 		break;
 
 	case 3:
-		bulletDamage += 1;
+		bulletDamage += 2;
 		player.set_bullet_damage(bulletDamage); // Tăng sát thương đạn
 		chest_type = BULLET_DAMAGE;
 		break;

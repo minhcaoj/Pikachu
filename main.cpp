@@ -335,7 +335,7 @@ int main(int argv, char* argc[]) {
 
                 lastTime = currentTime;
                 if (SDL_GetTicks() - startTime - lastSpawnTime >= 10000) {
-					int caseEnemy = rand() % 3;
+					int caseEnemy = rand() % 7;
                     Enemy* p_enemy = new Enemy();
 					Enemy* p_enemy1 = new Enemy();
 					Enemy* p_enemy2 = new Enemy();
@@ -346,7 +346,7 @@ int main(int argv, char* argc[]) {
                         if (p_enemy != NULL)
                         {
                             p_enemy->LoadImg("res/Pokemon/Fire + stone dragon/sprite9_idle.png", gRenderer);
-                            p_enemy->set_health_val(15 + ((SDL_GetTicks() - startTime) / 1000));
+                            p_enemy->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
                             p_enemy->set_clips();
 
                             p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
@@ -364,7 +364,7 @@ int main(int argv, char* argc[]) {
                         if (p_enemy != NULL)
                         {
                             p_enemy->LoadImg("res/Pokemon/Leaf - lion/sprite3_idle.png", gRenderer);
-                            p_enemy->set_health_val(15 + ((SDL_GetTicks() - startTime) / 1000));
+                            p_enemy->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
                             p_enemy->set_clips();
 
                             p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
@@ -385,7 +385,7 @@ int main(int argv, char* argc[]) {
                         if (p_enemy1 != NULL && p_enemy2 != NULL)
                         {
                             p_enemy1->LoadImg("res/Pokemon/Fire + stone dragon/sprite9_idle.png", gRenderer);
-                            p_enemy1->set_health_val(15 + ((SDL_GetTicks() - startTime) / 1000));
+                            p_enemy1->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
                             p_enemy1->set_clips();
                             int dragonX = rand() % 2 ? 220 : 350;
                             p_enemy1->set_x_pos(dragonX);
@@ -394,7 +394,7 @@ int main(int argv, char* argc[]) {
 							enemy_lists.push_back(p_enemy1);
 
                             p_enemy2->LoadImg("res/Pokemon/Leaf - lion/sprite3_idle.png", gRenderer);
-                            p_enemy2->set_health_val(15 + ((SDL_GetTicks() - startTime) / 1000));
+                            p_enemy2->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
                             p_enemy2->set_clips();
 							int lionX = (dragonX == 220) ? 350 : 220; // Ensure lion spawns at a different x position
                             
@@ -408,7 +408,102 @@ int main(int argv, char* argc[]) {
                         }
 						lastSpawnTime = currentTime;
 						break;
+
+                    case 3:
+                        if (p_enemy != NULL)
+                        {
+                            p_enemy->LoadImg("res/Pokemon/Poison - hydra/sprite11_idle.png", gRenderer);
+                            p_enemy->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
+                            p_enemy->set_clips();
+
+                            p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
+
+                            p_enemy->set_y_pos(-150);
+
+
+                            enemy_lists.push_back(p_enemy);
+
+                        }
+                        lastSpawnTime = currentTime;
+                        break;
+                        // Spawn Hydra
+
+                    case 4:
+                        if (p_enemy != NULL)
+                        {
+                            p_enemy->LoadImg("res/Pokemon/Stone - capy/sprite4_idle.png", gRenderer);
+                            p_enemy->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
+                            p_enemy->set_clips();
+
+                            p_enemy->set_x_pos((rand() % 2) ? 220 : 350);
+
+                            p_enemy->set_y_pos(-150);
+
+
+                            enemy_lists.push_back(p_enemy);
+
+                        }
+                        lastSpawnTime = currentTime;
+                        break;
+                        // Spawn Capy
+                    case 5:
+                        if (p_enemy1 != NULL && p_enemy2 != NULL)
+                        {
+                            p_enemy1->LoadImg("res/Pokemon/Stone - capy/sprite4_idle.png", gRenderer);
+                            p_enemy1->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
+                            p_enemy1->set_clips();
+                            int dragonX = 220;
+                            p_enemy1->set_x_pos(dragonX);
+                            p_enemy1->set_y_pos(-150);
+
+                            enemy_lists.push_back(p_enemy1);
+
+                            p_enemy2->LoadImg("res/Pokemon/Stone - capy/sprite4_idle.png", gRenderer);
+                            p_enemy2->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
+                            p_enemy2->set_clips();
+                            int lionX = 350; // Ensure lion spawns at a different x position
+
+
+                            p_enemy2->set_x_pos(lionX);
+
+                            p_enemy2->set_y_pos(-150);
+
+
+                            enemy_lists.push_back(p_enemy2);
+                        }
+                        lastSpawnTime = currentTime;
+                        break;
+                        // 2 Capy
+                    case 6:
+                        if (p_enemy1 != NULL && p_enemy2 != NULL)
+                        {
+                            p_enemy1->LoadImg("res/Pokemon/Poison - hydra/sprite11_idle.png", gRenderer);
+                            p_enemy1->set_health_val(15 + ((SDL_GetTicks() - startTime) / 500));
+                            p_enemy1->set_clips();
+                            int dragonX = 220;
+                            p_enemy1->set_x_pos(dragonX);
+                            p_enemy1->set_y_pos(-150);
+
+                            enemy_lists.push_back(p_enemy1);
+
+                            p_enemy2->LoadImg("res/Pokemon/Poison - hydra/sprite11_idle.png", gRenderer);
+                            p_enemy2->set_health_val(30 + ((SDL_GetTicks() - startTime) / 500));
+                            p_enemy2->set_clips();
+                            int lionX = 350; // Ensure lion spawns at a different x position
+
+
+                            p_enemy2->set_x_pos(lionX);
+
+                            p_enemy2->set_y_pos(-150);
+
+
+                            enemy_lists.push_back(p_enemy2);
+                        }
+                        lastSpawnTime = currentTime;
+                        break;
                     }
+                    
+                    
 
                     
                 }
@@ -624,7 +719,7 @@ int main(int argv, char* argc[]) {
                                             color = { 0, 255, 0, 255 };
                                             break;
                                         case BULLET_DAMAGE:
-                                            effectText = "+1 Bullet Damage!";
+                                            effectText = "+2 Bullet Damage!";
                                             color = { 255, 0, 0, 255 };
                                             break;
                                         }
