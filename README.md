@@ -28,7 +28,7 @@
 Các thư viện đi kèm: **SDL2**, **SDL2-image**, **SDL2-ttf** và **SDL2-mixer**.
 
 # 1. Preview
-Demo Game: https://youtu.be/tIsmC2twFCQ
+Demo Game: https://youtu.be/QUiqTDwUxIw
 
 ![res](res/image/preview.png)
 # 2. Building And Running
