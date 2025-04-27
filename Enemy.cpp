@@ -85,10 +85,7 @@ void Enemy::Update(float scroll_speed, float deltaTime)
 	
 	y_pos += scroll_speed* deltaTime;
 	rect_.y = static_cast<int>(y_pos);
-	if (y_pos > SCREEN_HEIGHT)
-	{
-
-	}
+	
 }
 
 void Enemy::takeDamage(int damage)

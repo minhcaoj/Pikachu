@@ -12,6 +12,7 @@
 #include <cstdlib>  // cho rand()
 #include <ctime>
 
+
 static SDL_Window* gWindow = NULL;
 static SDL_Renderer* gRenderer = NULL;
 static SDL_Event gEvent;

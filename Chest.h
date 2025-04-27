@@ -11,6 +11,7 @@ enum ChestType {
 	
 	HEALTH_UPGRADE = 2,
 	BULLET_DAMAGE = 3,
+	TROLL = 4,
 };
 
 class Chest:public BaseObject

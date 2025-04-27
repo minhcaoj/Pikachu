@@ -115,7 +115,7 @@ void Chest::ApplyEffectToPlayer(Player& player)
 	float playerSpeed = player.get_speed_val();
 	int playerHealth = player.get_health_val();
 	int bulletDamage = player.get_bullet_damage();
-	int check = rand() % 4;
+	int check = rand() % 5;
 	switch (check) {
 	case 0:
 
@@ -140,7 +140,11 @@ void Chest::ApplyEffectToPlayer(Player& player)
 		player.set_bullet_damage(bulletDamage); // Tăng sát thương đạn
 		chest_type = BULLET_DAMAGE;
 		break;
+	case 4:
+		chest_type = TROLL;
+		break;
 	}
+	
 }
 
 

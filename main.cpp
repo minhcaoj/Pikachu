@@ -9,9 +9,12 @@
 #include "TextObject.h"
 #include "MenuUI.h"
 #include "BuffText.h"
+#include "CommonFunc.h"
+#include "MusicObject.h"
 
 // Global variables
 
+Mix_Music* gMusic = nullptr;
 const int FRAME_DELAY_GAME = 1000 / 60;  // 60 FPS
 
 Uint32 frameStart;
@@ -174,11 +177,32 @@ bool Init()
             success = false;
         }
     }
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        std::cout << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
+        return false;
+    }
     return success;
 }
 
+bool loadMedia()
+{
+    const char* path = "Music/BackgroundMusic.mp3";  // hãy thử đổi sang .ogg nếu MP3 không hỗ trợ
+   
+    gMusic = Mix_LoadMUS(path);
+    if (!gMusic)
+    {
+        std::cout << "Load nhạc thất bại! SDL_mixer Lỗi: " << Mix_GetError() << std::endl;
+        return false;
+    }
+    std::cout << "Load nhạc thành công: " << path << std::endl;
+    return true;
+}
 void close()
 {
+    Mix_FreeMusic(gMusic);
+    gMusic = nullptr;
+	
     gBackground.Free();
 
     SDL_DestroyRenderer(gRenderer);
@@ -187,6 +211,7 @@ void close()
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
 
+    Mix_CloseAudio();
     IMG_Quit();
     SDL_Quit();
 }
@@ -202,6 +227,19 @@ bool isInside(SDL_Rect rect, int x, int y) {
 // Main
 int main(int argv, char* argc[]) {
     if (Init() == false) return -1;
+
+    if (!loadMedia())
+        return -1;
+
+    // Phát nhạc, kiểm tra kết quả
+    if (Mix_PlayMusic(gMusic, -1) < 0)
+    {
+        std::cout << "Mix_PlayMusic thất bại! Lỗi: " << Mix_GetError() << std::endl;
+    }
+    else
+    {
+        std::cout << "Đang phát nhạc..." << std::endl;
+    }
 
     ///*EnemySpawnManager spawnManager;*/
     //spawnManager.SetRenderer(gRenderer);
@@ -239,7 +277,10 @@ int main(int argv, char* argc[]) {
 
     bool gameOver = false;
     
-
+    if (!gameOver && !inMenu)
+    {
+        Mix_PlayMusic(gMusic, -1);
+    }
     int mouseX = 0, mouseY = 0;
     
 
@@ -281,12 +322,15 @@ int main(int argv, char* argc[]) {
                 if (isInside(gameOverRender.replayButton, mouseX, mouseY)) {
                     std::cout << "Restart clicked!\n";
                     // Reset game state
+					
                     gameOver = false;
                     inMenu = false;
                     timing = true;
                     score = 0;
                     enemy_lists.clear();
                     chest_lists.clear();
+                    lastSpawnTime = 0.0f;
+					lastChestSpawnTime = 0.0f;
                     p_player.Reset(); // Hàm reset trạng thái của Player
                 }
 				if (isInside(gameOverRender.quitButton, mouseX, mouseY)) {
@@ -322,6 +366,7 @@ int main(int argv, char* argc[]) {
 				startTime = SDL_GetTicks();
 				timing = false;
             }
+            
 			
             
             if (!gameOver)
@@ -334,7 +379,13 @@ int main(int argv, char* argc[]) {
 				
 
                 lastTime = currentTime;
-                if (SDL_GetTicks() - startTime - lastSpawnTime >= 10000) {
+                std::cout << "StartTimeTim: " << startTime << std::endl;
+                std::cout << "CurrentTimeTim: " << currentTime << std::endl;
+                std::cout << "lastSpawnTime: " << lastSpawnTime << std::endl;
+                std::cout << "lastChestSpawnTime: " << lastChestSpawnTime << std::endl;
+                if (SDL_GetTicks() - lastSpawnTime - startTime >= 8000) {
+                    std::cout << "IsSpawn" << std::endl;
+                    
 					int caseEnemy = rand() % 7;
                     Enemy* p_enemy = new Enemy();
 					Enemy* p_enemy1 = new Enemy();
@@ -357,7 +408,7 @@ int main(int argv, char* argc[]) {
                             enemy_lists.push_back(p_enemy);
 
                         }
-                        lastSpawnTime = currentTime;
+                        
 						break;
 					case 1:
                         
@@ -375,7 +426,7 @@ int main(int argv, char* argc[]) {
                             enemy_lists.push_back(p_enemy);
 
                         }
-                        lastSpawnTime = currentTime;
+                        
 						// Spawn Lion   
 
 						break;
@@ -406,7 +457,7 @@ int main(int argv, char* argc[]) {
 
                             enemy_lists.push_back(p_enemy2);
                         }
-						lastSpawnTime = currentTime;
+						
 						break;
 
                     case 3:
@@ -424,7 +475,7 @@ int main(int argv, char* argc[]) {
                             enemy_lists.push_back(p_enemy);
 
                         }
-                        lastSpawnTime = currentTime;
+                       
                         break;
                         // Spawn Hydra
 
@@ -443,7 +494,7 @@ int main(int argv, char* argc[]) {
                             enemy_lists.push_back(p_enemy);
 
                         }
-                        lastSpawnTime = currentTime;
+                        
                         break;
                         // Spawn Capy
                     case 5:
@@ -471,7 +522,7 @@ int main(int argv, char* argc[]) {
 
                             enemy_lists.push_back(p_enemy2);
                         }
-                        lastSpawnTime = currentTime;
+                        
                         break;
                         // 2 Capy
                     case 6:
@@ -499,11 +550,11 @@ int main(int argv, char* argc[]) {
 
                             enemy_lists.push_back(p_enemy2);
                         }
-                        lastSpawnTime = currentTime;
+                        
                         break;
                     }
                     
-                    
+					lastSpawnTime = currentTime - startTime;
 
                     
                 }
@@ -522,7 +573,7 @@ int main(int argv, char* argc[]) {
                         chest_lists.push_back(p_chest);
 
                     }
-                    lastChestSpawnTime = currentTime;
+                    lastChestSpawnTime = currentTime - startTime;
                 }
 
                 map.Update(deltaTime, scroll_speed);
@@ -580,7 +631,7 @@ int main(int argv, char* argc[]) {
                 std::vector<Bullet*> bullet_lists = p_player.get_bullet_list();
                 SDL_Rect pRect = p_player.GetRect();
                 SDL_Rect eRect;
-				std::cout << enemy_lists.size() << std::endl;
+				
                 // Bullet and enemy collide
                 for (int i = 0; i < enemy_lists.size(); i++)
                 {
@@ -590,8 +641,8 @@ int main(int argv, char* argc[]) {
                     {
                         eRect.x = p_enemy->GetRect().x;
                         eRect.y = p_enemy->GetRect().y;
-                        eRect.w = p_enemy->get_width_frame();
-                        eRect.h = p_enemy->get_height_frame();
+                        eRect.w = p_enemy->get_width_frame() - 40;
+                        eRect.h = p_enemy->get_height_frame() - 40;
 
 
 
@@ -635,7 +686,7 @@ int main(int argv, char* argc[]) {
                             enemy_lists.erase(enemy_lists.begin() + i);
                             lastDamageTime = currentTime;
                             std::cout << "Player health: " << p_player.get_health_val() << std::endl;
-                            if (p_player.get_health_val() <= 0 && !gameOver)
+                            if (p_player.get_health_val() <= -1 && !gameOver)
                             {
                                 std::cout << "GAME OVER" << std::endl;
                                 gameOver = true;
@@ -722,9 +773,15 @@ int main(int argv, char* argc[]) {
                                             effectText = "+2 Bullet Damage!";
                                             color = { 255, 0, 0, 255 };
                                             break;
+                                        case TROLL:
+                                            effectText = "Good Luck Next Time =))";
+                                            color = { 255, 0, 255, 255 };
+                                            break;
                                         }
+                                       
+                                            
 
-                                        buffTextList.emplace_back(effectText, p_player.GetRectFrame().x, p_player.GetRectFrame().y, color, chestText);
+                                        buffTextList.emplace_back(effectText, p_player.GetRectFrame().x - 60 , p_player.GetRectFrame().y, color, chestText);
 
                                     
                                    
@@ -784,8 +841,7 @@ int main(int argv, char* argc[]) {
               
 
             }
-            else {
-				
+            else if(gameOver){
 
                 SDL_Rect dstRect, bgRect;
                 dstRect.w = 400; // chiều rộng ảnh Game Over
