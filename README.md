@@ -35,7 +35,7 @@ Demo Game: https://youtu.be/tIsmC2twFCQ
   - Chạy file **main.exe** để chơi
   - Sử dụng [MinGW-w64](https://www.mingw-w64.org/) và các thư viện [SDL2](https://www.libsdl.org/) đi kèm để build file **main.cpp**. Chạy file vừa build được để chơi.
 # 3. How to play
-Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải các vật thể này sẽ bị trừ máu.
+Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**, **Rắn độc**, **Capybara**. Chạm phải các vật thể này sẽ bị trừ máu.
 
 Ăn thêm các vật phẩm cần thiết để hỗ trợ cho màn chơi.
 
