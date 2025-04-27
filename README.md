@@ -52,8 +52,11 @@ Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải 
 | Nhân vật                                                                                    | Tên                 | Số máu                                 |
 |---------------------------------------------------------------------------------------------|---------------------|----------------------------------------|
 | <img src = "res/image/Player.png" width = 96>                                               | **Main Character**  | 10 + **Số máu ăn thêm**                |
-| <img src = "res/image/Fire dragon.png" width = 96>                                          | **Stone Dragon**    | 15 + **Theo thời gian**                |
+| <img src = "res/image/Fire dragon.png" width = 96>                                          | **Fire Dragon**     | 15 + **Theo thời gian**                |
 | <img src = "res/image/Leaf lion.png" width = 96>                                            | **Leaf lion**       | 20 + **Theo thời gian**                |
+| <img src = "res/image/Poison - hydra.png" width = 96>                                       | **Poison Hydra**    | 20 + **Theo thời gian**                |
+| <img src = "res/image/Stone - capy.png" width = 96>                                         | **Stone Capy**      | 20 + **Theo thời gian**                |
+
 
 # 5. Controls (Included in the Tutorial of the Game)
   - Di chuyển: **A**, **D** (trái phải).
