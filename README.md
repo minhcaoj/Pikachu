@@ -35,7 +35,7 @@ Demo Game: https://youtu.be/tIsmC2twFCQ
   - Chạy file **main.exe** để chơi
   - Sử dụng [MinGW-w64](https://www.mingw-w64.org/) và các thư viện [SDL2](https://www.libsdl.org/) đi kèm để build file **main.cpp**. Chạy file vừa build được để chơi.
 # 3. How to play
-Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải các vật thể này sẽ bị trừ máu.
+Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**, **Rắn độc**, **Capybara**. Chạm phải các vật thể này sẽ bị trừ máu.
 
 Ăn thêm các vật phẩm cần thiết để hỗ trợ cho màn chơi.
 
@@ -52,8 +52,11 @@ Né hoặc bắn hạ các quái vật: **Rồng**, **Sư tử**. Chạm phải 
 | Nhân vật                                                                                    | Tên                 | Số máu                                 |
 |---------------------------------------------------------------------------------------------|---------------------|----------------------------------------|
 | <img src = "res/image/Player.png" width = 96>                                               | **Main Character**  | 10 + **Số máu ăn thêm**                |
-| <img src = "res/image/Fire dragon.png" width = 96>                                          | **Stone Dragon**    | 15 + **Theo thời gian**                |
+| <img src = "res/image/Fire dragon.png" width = 96>                                          | **Fire Dragon**     | 15 + **Theo thời gian**                |
 | <img src = "res/image/Leaf lion.png" width = 96>                                            | **Leaf lion**       | 20 + **Theo thời gian**                |
+| <img src = "res/image/Poison - hydra.png" width = 96>                                       | **Poison Hydra**    | 20 + **Theo thời gian**                |
+| <img src = "res/image/Stone - capy.png" width = 96>                                         | **Stone Capy**      | 20 + **Theo thời gian**                |
+
 
 # 5. Controls (Included in the Tutorial of the Game)
   - Di chuyển: **A**, **D** (trái phải).
