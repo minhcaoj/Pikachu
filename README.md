@@ -15,7 +15,7 @@
 - [3. How to play](#3-how-to-play)
 - [4. Parameters](#4-parameters)
   * [A. Chest Buff](#a-chest-buff)
-  * [B. Characters](#c-characters)
+  * [B. Characters](#b-characters)
 - [5. Controls](#5-controls-included-in-the-tutorial-of-the-game)
 - [6. Scoring method](#6-scoring-method)
 - [7. Sources](#7-sources)
